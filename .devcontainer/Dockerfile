@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
-ARG BASE_IMAGE_TAG=18
-FROM mcr.microsoft.com/devcontainers/javascript-node:${BASE_IMAGE_TAG}
 
+FROM node:18-alpine
+RUN apk add --no-cache git openssh curl bash
+
+RUN npm install -g pnpm
+# Keep your working directory
 WORKDIR /workspaces/${localWorkspaceFolderBasename}

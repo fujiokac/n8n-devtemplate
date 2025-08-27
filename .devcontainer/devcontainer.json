@@ -4,14 +4,6 @@
   "service": "n8n",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-  // Switchable distro build
-  "build": {
-  "dockerfile": "Dockerfile",
-  "args": {
-    "BASE_IMAGE_TAG": "18" // or "18-alpine"
-  }
-},
-
   "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-create.sh",
   "postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-attach.sh",
 

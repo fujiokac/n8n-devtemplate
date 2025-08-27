@@ -1,16 +1,14 @@
-version: "3.9"
-
 services:
   n8n:
-    image: mcr.microsoft.com/devcontainers/javascript-node:18
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: sleep infinity
     volumes:
       - ..:/workspace:cached
       - n8n_data:/workspace/n8n_data
     env_file:
       - ../.env
-    # depends_on:
-    #   - db   # Commented out until DB is added
 
 volumes:
   n8n_data:
