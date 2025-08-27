@@ -9,7 +9,7 @@
     "dockerfile": "Dockerfile",
     "args": {
       // Change to "alpine" or "debian" and rebuild
-      "BASE_VARIANT": "debian"
+      "BASE_VARIANT": "alpine"
     }
   },
 
