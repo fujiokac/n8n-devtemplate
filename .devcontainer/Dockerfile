@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 FROM node:18-alpine
 
 # Install common dev tools
@@ -13,13 +11,9 @@ RUN apk add --no-cache \
     shadow \
     sudo
 
-# Optional: create a non-root user like Codespaces' default
-RUN adduser -D -u 1000 vscode \
- && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-USER vscode
-
 RUN npm install -g pnpm
 
-# Keep your working directory
-WORKDIR /workspaces/${localWorkspaceFolderBasename}
+# Give the existing 'node' user passwordless sudo
+RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER node
