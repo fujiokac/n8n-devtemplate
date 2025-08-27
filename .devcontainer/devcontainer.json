@@ -6,12 +6,11 @@
 
   // Switchable distro build
   "build": {
-    "dockerfile": "Dockerfile",
-    "args": {
-      // Change to "alpine" or "debian" and rebuild
-      "BASE_VARIANT": "debian"
-    }
-  },
+  "dockerfile": "Dockerfile",
+  "args": {
+    "BASE_IMAGE_TAG": "18" // or "18-alpine"
+  }
+},
 
   "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-create.sh",
   "postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-attach.sh",

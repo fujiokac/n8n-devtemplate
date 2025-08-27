@@ -1,8 +1,5 @@
 # syntax=docker/dockerfile:1
+ARG BASE_IMAGE_TAG=18
+FROM mcr.microsoft.com/devcontainers/javascript-node:${BASE_IMAGE_TAG}
 
-# Base variant arg – swap between "debian" and "alpine"
-ARG BASE_VARIANT=debian
-FROM mcr.microsoft.com/devcontainers/javascript-node:18-${BASE_VARIANT}
-
-# Set workspace dir
 WORKDIR /workspaces/${localWorkspaceFolderBasename}
