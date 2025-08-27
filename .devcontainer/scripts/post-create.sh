@@ -22,9 +22,6 @@ corepack prepare --activate
 pnpm install
 
 echo "Installing required system packages..."
-sudo apk add --no-cache bash curl ripgrep
-
-echo "Installing n8n globally via npm..."
-npm install -g n8n
+sudo apk add --no-cache ripgrep
 
 echo "✅ Development environment setup complete for ${REPO_NAME}!"

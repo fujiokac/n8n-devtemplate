@@ -19,5 +19,7 @@ RUN adduser -D -u 1000 vscode \
 
 USER vscode
 
+RUN npm install -g pnpm
+
 # Keep your working directory
 WORKDIR /workspaces/${localWorkspaceFolderBasename}
