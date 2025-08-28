@@ -4,7 +4,7 @@ set -eu
 WORKSPACE_DIR="$1"
 REPO_NAME="$2"
 
-CLAUDE_INSTALL_LOG="$WORKSPACE_DIR/claude-install.log"
+CLAUDE_INSTALL_LOG="$WORKSPACE_DIR/logs/claude-install.log"
 
 echo "Installing Claude Code for ${REPO_NAME}... (logging to $CLAUDE_INSTALL_LOG)"
 

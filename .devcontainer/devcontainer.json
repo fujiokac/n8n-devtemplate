@@ -17,6 +17,15 @@
     "DB_PASSWORD": "${localEnv:DB_PASSWORD}",
     "N8N_ENCRYPTION_KEY": "${localEnv:N8N_ENCRYPTION_KEY}"
   },
+  
+  "secrets": {
+    "DB_PASSWORD": {
+      "description": "PostgreSQL database password"
+    },
+    "N8N_ENCRYPTION_KEY": {
+      "description": "n8n data encryption key"
+    }
+  },
 
   "customizations": {
     "codespaces": {

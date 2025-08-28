@@ -1,6 +1,9 @@
 #!/bin/sh
 # Source this script before running n8n: source source-n8n-env.sh
 
+# Start logging from the beginning
+exec > >(tee logs/start-n8n.log) 2>&1
+
 # Source .env file if it exists
 if [ -f .env ]; then
     set -a  # Export all variables
