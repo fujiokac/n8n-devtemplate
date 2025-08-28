@@ -11,7 +11,9 @@ RUN apk add --no-cache \
     shadow \
     sudo \
     openssl \
-    git-lfs
+    git-lfs \
+    postgresql \
+    postgresql-contrib
 
 RUN npm install -g pnpm
 
