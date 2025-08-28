@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     postgresql \
     postgresql-contrib
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm n8n
 
 # Give the existing 'node' user passwordless sudo
 RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
