@@ -1,8 +1,12 @@
 #!/bin/sh
 set -eu
 
+# Define log paths early
+SCRIPT_NAME="$(basename "$0" .sh)"
+MAIN_LOG="${LOGS_DIR:-logs}/${SCRIPT_NAME}.log"
+
 # Start logging from the beginning
-exec > >(tee logs/post-create.log) 2>&1
+exec > >(tee "$MAIN_LOG") 2>&1
 
 echo "=== Post-Create Setup ==="
 
@@ -14,8 +18,8 @@ else
 fi
 
 WORKSPACE_DIR="/workspaces/${REPO_NAME}"
-SCRIPTS_DIR="$(dirname "$0")/01-post-create.d"
-LOG_DIR="logs/01-post-create"
+SCRIPTS_DIR="$(dirname "$0")/${SCRIPT_NAME}.d"
+LOG_DIR="${LOGS_DIR:-logs}/${SCRIPT_NAME}"
 
 echo "Scripts will be logged individually to $LOG_DIR/[script-name].log"
 
@@ -27,7 +31,7 @@ if [ -d "$SCRIPTS_DIR" ]; then
     for script in "$SCRIPTS_DIR"/*; do
         [ -x "$script" ] || continue
         script_name="$(basename "$script")"
-        echo "→ Running $script_name" | tee -a logs/post-create.log
+        echo "→ Running $script_name" | tee -a "$MAIN_LOG"
         
         # Conditionally log script output based on .nolog naming convention
         "$script" "$WORKSPACE_DIR" "$REPO_NAME" \
