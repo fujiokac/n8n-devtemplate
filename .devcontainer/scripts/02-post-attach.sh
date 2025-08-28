@@ -14,7 +14,7 @@ else
 fi
 
 WORKSPACE_DIR="/workspaces/${REPO_NAME}"
-SCRIPTS_DIR="$(dirname "$0")/post-attach.d"
+SCRIPTS_DIR="$(dirname "$0")/02-post-attach.d"
 LOG_DIR="logs/02-post-attach"
 
 echo "Scripts will be logged individually to $LOG_DIR/[script-name].log"
