@@ -23,10 +23,10 @@
     "vscode": {
       "extensions": [
         "anthropic.claude-code",
-        "ms-vscode.vscode-typescript-next",
+        "ms-azuretools.vscode-docker",
+        "ckolkman.vscode-postgres",
         "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "vue.volar"
+        "humao.rest-client"
       ],
       "settings": {
         "editor.formatOnSave": true,
