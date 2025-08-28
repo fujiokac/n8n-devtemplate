@@ -1,21 +1,17 @@
-FROM node:18-alpine
+FROM n8nio/base:22
 
-# Install common dev tools
+# Install additional dev tools not in n8n base
 RUN apk add --no-cache \
-    git \
-    openssh \
     curl \
     bash \
-    ca-certificates \
-    tzdata \
     shadow \
     sudo \
-    openssl \
     git-lfs \
     postgresql \
     postgresql-contrib \
     ripgrep
 
+# Install global n8n and pnpm
 RUN npm install -g pnpm n8n
 
 # Give the existing 'node' user passwordless sudo
