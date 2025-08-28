@@ -4,8 +4,8 @@
   "service": "n8n",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-  "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/01-post-create.sh",
-  "postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/02-post-attach.sh",
+  "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-create.sh",
+  "postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/scripts/post-attach.sh",
 
   "forwardPorts": [5678],
   "portsAttributes": {
