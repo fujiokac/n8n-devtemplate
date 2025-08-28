@@ -9,7 +9,9 @@ RUN apk add --no-cache \
     ca-certificates \
     tzdata \
     shadow \
-    sudo
+    sudo \
+    openssl \
+    git-lfs
 
 RUN npm install -g pnpm
 
