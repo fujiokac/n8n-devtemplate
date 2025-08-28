@@ -77,6 +77,9 @@ temp/
 *.swo
 *~
 
+# Unused/archived files
+*.unused
+
 # OS
 .DS_Store
 .DS_Store?

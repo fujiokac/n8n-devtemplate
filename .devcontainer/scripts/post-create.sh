@@ -1,27 +1,27 @@
 #!/bin/sh
 set -eu
 
-# If GITHUB_REPOSITORY is set (e.g., "owner/repo"), use the repo name
+echo "=== Post-Create Setup ==="
+
+# Prefer GitHub-provided variable, fall back to current dir name
 if [ -n "${GITHUB_REPOSITORY:-}" ]; then
     REPO_NAME="${GITHUB_REPOSITORY##*/}"
-    PROJECT_DIR="/workspaces/${REPO_NAME}"
 else
-    # Fallback: infer from current working directory
-    PROJECT_DIR="$(pwd)"
-    REPO_NAME="$(basename "$PROJECT_DIR")"
+    REPO_NAME="$(basename "$(pwd)")"
 fi
 
-SCRIPTS_DIR="${PROJECT_DIR}/.devcontainer/scripts"
+WORKSPACE_DIR="/workspaces/${REPO_NAME}"
+SCRIPTS_DIR="$(dirname "$0")/post-create.d"
 
-echo "Setting up development environment for ${REPO_NAME}..."
+# Run each executable task script in order
+if [ -d "$SCRIPTS_DIR" ]; then
+    for script in "$SCRIPTS_DIR"/*; do
+        [ -x "$script" ] || continue
+        echo "→ Running $(basename "$script")"
+        "$script" "$WORKSPACE_DIR" "$REPO_NAME"
+    done
+else
+    echo "⚠️ No post-create scripts found in $SCRIPTS_DIR"
+fi
 
-cd "$PROJECT_DIR"
-
-echo "Preparing corepack and installing dependencies for n8n..."
-corepack prepare --activate
-pnpm install
-
-echo "Installing required system packages..."
-sudo apk add --no-cache ripgrep
-
-echo "✅ Development environment setup complete for ${REPO_NAME}!"
+echo "✅ Post-create setup complete for ${REPO_NAME}!"

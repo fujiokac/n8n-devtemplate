@@ -25,6 +25,10 @@ if [ ! -f .env ]; then
         echo "WARNING: Update N8N_HOST and WEBHOOK_URL in .env manually"
     fi
     
+    # Replace workspace folder placeholder with actual workspace name
+    WORKSPACE_NAME="$(basename "$(pwd)")"
+    sed -i "s|n8n-devtemplate|$WORKSPACE_NAME|g" .env
+    
     # Replace password placeholder
     sed -i "s|<GENERATE_STRONG_PASSWORD>|$PASSWORD|g" .env
     
@@ -33,4 +37,4 @@ else
     echo "✅ .env file already exists"
 fi
 
-echo "🚀 Ready to run: docker-compose up -d"
+echo "🚀 Ready to run: n8n start"

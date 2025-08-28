@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     openssl \
     git-lfs \
     postgresql \
-    postgresql-contrib
+    postgresql-contrib \
+    ripgrep
 
 RUN npm install -g pnpm n8n
 
