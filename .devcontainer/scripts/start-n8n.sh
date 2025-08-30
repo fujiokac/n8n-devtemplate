@@ -35,6 +35,7 @@ fi
 
 echo "✅ n8n environment ready"
 echo "Starting n8n..."
+echo "Press Ctrl+C to stop gracefully, or run './stop-n8n' from another terminal."
 
 # Start n8n
 n8n start
