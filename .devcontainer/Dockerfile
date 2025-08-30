@@ -14,7 +14,13 @@ RUN apk add --no-cache \
 # Install global n8n and pnpm
 RUN npm install -g pnpm n8n
 
-# Give the existing 'node' user passwordless sudo
-RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Configure pnpm store directory
+RUN mkdir -p ~/.pnpm-store && pnpm config set store-dir ~/.pnpm-store --global
+
+# Set up workspace permissions
+RUN mkdir -p /workspaces && chown node:node /workspaces
+
+# Give the existing 'node' user passwordless sudo (more secure approach)
+RUN echo "node ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/node
 
 USER node
