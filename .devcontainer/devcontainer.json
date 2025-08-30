@@ -9,11 +9,23 @@
 
   "forwardPorts": [5678],
   "portsAttributes": {
-    "5678": { "label": "n8n UI", "onAutoForward": "openBrowser" }
+    "5678": { "label": "n8n UI", "onAutoForward": "openBrowser", "visibility": "public" }
   },
 
   "remoteEnv": {
-    "N8N_USER_FOLDER": "${containerWorkspaceFolder}/n8n_data"
+    "LOGS_DIR": "logs",
+    "N8N_USER_FOLDER": "${containerWorkspaceFolder}/n8n_data",
+    "DB_PASSWORD": "${localEnv:DB_PASSWORD}",
+    "N8N_ENCRYPTION_KEY": "${localEnv:N8N_ENCRYPTION_KEY}"
+  },
+  
+  "secrets": {
+    "DB_PASSWORD": {
+      "description": "PostgreSQL database password"
+    },
+    "N8N_ENCRYPTION_KEY": {
+      "description": "n8n data encryption key"
+    }
   },
 
   "customizations": {
@@ -23,10 +35,10 @@
     "vscode": {
       "extensions": [
         "anthropic.claude-code",
-        "ms-vscode.vscode-typescript-next",
+        "ms-azuretools.vscode-docker",
+        "ckolkman.vscode-postgres",
         "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "vue.volar"
+        "humao.rest-client"
       ],
       "settings": {
         "editor.formatOnSave": true,

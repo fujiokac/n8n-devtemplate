@@ -1,23 +1,20 @@
-# syntax=docker/dockerfile:1
+FROM n8nio/base:22
 
-FROM node:18-alpine
-
-# Install common dev tools
+# Install additional dev tools not in n8n base
 RUN apk add --no-cache \
-    git \
-    openssh \
     curl \
     bash \
-    ca-certificates \
-    tzdata \
     shadow \
-    sudo
+    sudo \
+    git-lfs \
+    postgresql \
+    postgresql-contrib \
+    ripgrep
 
-# Optional: create a non-root user like Codespaces' default
-RUN adduser -D -u 1000 vscode \
- && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Install global n8n and pnpm
+RUN npm install -g pnpm n8n
 
-USER vscode
+# Give the existing 'node' user passwordless sudo
+RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Keep your working directory
-WORKDIR /workspaces/${localWorkspaceFolderBasename}
+USER node
