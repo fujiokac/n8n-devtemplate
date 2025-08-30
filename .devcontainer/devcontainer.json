@@ -9,7 +9,7 @@
 
   "forwardPorts": [5678],
   "portsAttributes": {
-    "5678": { "label": "n8n UI", "onAutoForward": "openBrowser" }
+    "5678": { "label": "n8n UI", "onAutoForward": "openBrowser", "visibility": "public" }
   },
 
   "remoteEnv": {
