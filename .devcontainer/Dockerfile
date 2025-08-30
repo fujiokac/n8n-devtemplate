@@ -9,7 +9,8 @@ RUN apk add --no-cache \
     git-lfs \
     postgresql \
     postgresql-contrib \
-    ripgrep
+    ripgrep \
+    github-cli
 
 # Install global n8n and pnpm
 RUN npm install -g pnpm n8n

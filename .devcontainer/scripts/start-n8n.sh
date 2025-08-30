@@ -2,9 +2,9 @@
 # Source this script before running n8n: source source-n8n-env.sh
 
 # Start logging from the beginning
-SCRIPT_NAME="$(basename "$(readlink -f "$0")" .sh)"
-exec > >(tee "${LOGS_DIR:-logs}/${SCRIPT_NAME}.log") 2>&1
+SCRIPT_NAME="$(basename "$0" .sh)"
 
+{
 # Source .env file if it exists
 if [ -f .env ]; then
     set -a  # Export all variables
@@ -34,8 +34,18 @@ else
 fi
 
 echo "✅ n8n environment ready"
+
+# Set port visibility in Codespaces
+if [ -n "$CODESPACE_NAME" ]; then
+    echo "Setting port 5678 to public in Codespaces..."
+    # Toggle private/public to refresh the port forwarding
+    gh codespace ports visibility 5678:private -c "$CODESPACE_NAME" >/dev/null 2>&1
+    gh codespace ports visibility 5678:public -c "$CODESPACE_NAME" || echo "Warning: Failed to set port visibility"
+fi
+
 echo "Starting n8n..."
 echo "Press Ctrl+C to stop gracefully, or run './stop-n8n' from another terminal."
 
 # Start n8n
 n8n start
+} 2>&1 | tee "${LOGS_DIR:-logs}/${SCRIPT_NAME}.log"
