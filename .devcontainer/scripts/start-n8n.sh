@@ -38,6 +38,8 @@ echo "✅ n8n environment ready"
 # Set port visibility in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
     echo "Setting port 5678 to public in Codespaces..."
+    # Toggle private/public to refresh the port forwarding
+    gh codespace ports visibility 5678:private -c "$CODESPACE_NAME" >/dev/null 2>&1
     gh codespace ports visibility 5678:public -c "$CODESPACE_NAME" || echo "Warning: Failed to set port visibility"
 fi
 
