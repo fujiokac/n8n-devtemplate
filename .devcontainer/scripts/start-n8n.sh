@@ -2,7 +2,7 @@
 # Source this script before running n8n: source source-n8n-env.sh
 
 # Start logging from the beginning
-SCRIPT_NAME="$(basename "$0" .sh)"
+SCRIPT_NAME="$(basename "$(readlink -f "$0")" .sh)"
 exec > >(tee "${LOGS_DIR:-logs}/${SCRIPT_NAME}.log") 2>&1
 
 # Source .env file if it exists
