@@ -34,6 +34,13 @@ else
 fi
 
 echo "✅ n8n environment ready"
+
+# Set port visibility in Codespaces
+if [ -n "$CODESPACE_NAME" ]; then
+    echo "Setting port 5678 to public in Codespaces..."
+    gh codespace ports visibility 5678:public -c "$CODESPACE_NAME" || echo "Warning: Failed to set port visibility"
+fi
+
 echo "Starting n8n..."
 echo "Press Ctrl+C to stop gracefully, or run './stop-n8n' from another terminal."
 
