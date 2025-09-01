@@ -54,10 +54,7 @@ This repository includes an automated template sync workflow that helps you stay
 
 ### Manual Updates
 
-To manually check for template updates:
-
-1. **GitHub Web**: Go to Actions → "Template Sync" → "Run workflow"
-2. **GitHub CLI**: `gh workflow run template-sync.yml`
+To manually trigger template updates, go to **Actions** → **"Template Sync"** → **"Run workflow"**
 
 > **Note**: Template updates only affect configuration and setup files, never your n8n workflows or data.
 
