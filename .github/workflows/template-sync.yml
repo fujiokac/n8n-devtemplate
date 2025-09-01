@@ -56,8 +56,8 @@ jobs:
           
           git checkout -b "$BRANCH_NAME"
           
-          # Attempt merge
-          if git merge template/main --no-edit --allow-unrelated-histories; then
+          # Attempt merge (prefer template version for conflicts)
+          if git merge template/main --no-edit --allow-unrelated-histories -X theirs; then
             echo "merge_success=true" >> $GITHUB_OUTPUT
             git push origin "$BRANCH_NAME"
           else
