@@ -4,6 +4,13 @@ set -eu
 WORKSPACE_DIR="$1"
 REPO_NAME="$2"
 
+# Check if Claude is already installed
+if command -v claude >/dev/null 2>&1; then
+    echo "✅ Claude Code is already installed"
+    claude --version
+    exit 0
+fi
+
 echo "Installing Claude Code for ${REPO_NAME}..."
 
 # Create temporary log for parsing curl output
