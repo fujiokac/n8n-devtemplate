@@ -4,6 +4,12 @@
 
 echo "Checking for template sync issues..."
 
+# Skip if this IS the template repository
+if [ "$(basename "$(pwd)")" = "n8n-devtemplate" ]; then
+    echo "ℹ️  Skipping template sync check - this is the template repository"
+    exit 0
+fi
+
 # Check if gh CLI is available and authenticated
 if ! command -v gh >/dev/null 2>&1; then
     echo "ℹ️  GitHub CLI not available - skipping template issue check"
