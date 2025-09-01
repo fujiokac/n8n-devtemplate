@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     command: sleep infinity
     volumes:
-      - ..:/workspace:cached
-      - n8n_data:/workspace/n8n_data
+      - ..:/workspaces:cached
+      - n8n_data:/workspaces/n8n_data
     env_file:
       - ../.env
 
