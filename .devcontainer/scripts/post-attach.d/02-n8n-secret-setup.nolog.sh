@@ -12,6 +12,9 @@ fi
 if [ -z "$N8N_ENCRYPTION_KEY" ]; then
     missing_secrets="$missing_secrets N8N_ENCRYPTION_KEY"
 fi
+if [ -z "$N8N_BACKUP_KEY" ]; then
+    missing_secrets="$missing_secrets N8N_BACKUP_KEY"
+fi
 
 if [ -z "$missing_secrets" ]; then
     echo "✅ All required secrets configured"

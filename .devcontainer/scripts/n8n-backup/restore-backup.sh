@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# Restore encrypted backup of n8n workflows and custom nodes
+# Usage: restore-backup.sh <encrypted_backup_file>
+
+set -e
+
+# Setup logging
+LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore-$(date +%Y%m%d-%H%M%S).log"
+exec > >(tee "$LOG_FILE") 2>&1
+
+SCRIPT_DIR="$(dirname "$0")"
+N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
+TEMP_DIR="${TMPDIR:-/tmp}/n8n-restore-$$"
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <encrypted_backup_file>"
+    echo "Example: $0 n8n-backup-20250901-143022.tar.gz.enc"
+    exit 1
+fi
+
+ENCRYPTED_FILE="$1"
+
+echo "Restoring n8n backup from: $ENCRYPTED_FILE"
+
+# Check if backup key is available
+if [ -z "$N8N_BACKUP_KEY" ]; then
+    echo "Error: N8N_BACKUP_KEY environment variable not set"
+    echo "This backup was encrypted with a specific key that must be configured"
+    echo "in your GitHub Codespace secrets to decrypt it."
+    exit 1
+fi
+
+# Verify encrypted file exists
+if [ ! -f "$ENCRYPTED_FILE" ]; then
+    echo "Error: Backup file '$ENCRYPTED_FILE' not found"
+    exit 1
+fi
+
+# Create temporary directory
+mkdir -p "$TEMP_DIR"
+
+# Decrypt archive
+echo "Decrypting backup..."
+ARCHIVE_FILE="$TEMP_DIR/backup.tar.gz"
+"$SCRIPT_DIR/decrypt-backup.sh" "$ENCRYPTED_FILE" "$ARCHIVE_FILE"
+
+# Extract archive
+echo "Extracting backup..."
+cd "$TEMP_DIR"
+tar -xzf "$ARCHIVE_FILE"
+
+# Verify backup structure
+if [ ! -d "$TEMP_DIR/n8n-data" ]; then
+    echo "Error: Invalid backup structure - n8n-data directory not found"
+    rm -rf "$TEMP_DIR"
+    exit 1
+fi
+
+# Stop n8n if running (optional - user should handle this)
+echo "Note: Make sure n8n is stopped before restoring"
+
+# Create n8n data directory if it doesn't exist
+mkdir -p "$N8N_DATA_DIR"
+
+# Restore workflows using n8n CLI
+if [ -d "$TEMP_DIR/n8n-data/workflows" ]; then
+    echo "Restoring workflows using n8n CLI..."
+    if command -v npx >/dev/null 2>&1; then
+        # Import all workflow files from backup
+        for workflow_file in "$TEMP_DIR/n8n-data/workflows"/*.json; do
+            [ -f "$workflow_file" ] || continue
+            echo "Importing $(basename "$workflow_file")..."
+            npx n8n import:workflow --input "$workflow_file" || {
+                echo "Warning: Failed to import $(basename "$workflow_file")"
+            }
+        done
+        echo "Workflows imported successfully"
+    else
+        echo "Error: npx not found - cannot run n8n CLI commands"
+        exit 1
+    fi
+else
+    echo "No workflow backups found in archive"
+fi
+
+# Restore binary data
+if [ -d "$TEMP_DIR/n8n-data/binaryData" ]; then
+    echo "Restoring binary data..."
+    cp -r "$TEMP_DIR/n8n-data/binaryData" "$N8N_DATA_DIR/"
+    echo "Binary data restored"
+fi
+
+# Restore custom nodes
+if [ -d "$TEMP_DIR/n8n-data/nodes" ]; then
+    echo "Restoring custom nodes..."
+    cp -r "$TEMP_DIR/n8n-data/nodes" "$N8N_DATA_DIR/"
+    echo "Custom nodes restored"
+fi
+
+# Set proper permissions
+chown -R node:node "$N8N_DATA_DIR" 2>/dev/null || true
+
+# Cleanup
+rm -rf "$TEMP_DIR"
+
+echo ""
+echo "✅ Backup restored successfully!"
+echo ""
+echo "Next steps:"
+echo "1. Start n8n: n8n start"
+echo "2. Re-enter any credentials (they are not restored for security)"
+echo "3. Test your workflows"
