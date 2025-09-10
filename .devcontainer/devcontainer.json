@@ -15,11 +15,13 @@
   "remoteEnv": {
     "LOGS_DIR": "logs",
     "N8N_USER_FOLDER": "/workspaces/n8n_data",
+    // PostgreSQL only: uncomment the line below when switching to PostgreSQL
     // "DB_PASSWORD": "${localEnv:DB_PASSWORD}",
     "N8N_ENCRYPTION_KEY": "${localEnv:N8N_ENCRYPTION_KEY}"
   },
   
   "secrets": {
+    // PostgreSQL only: uncomment the block below when switching to PostgreSQL
     // "DB_PASSWORD": {
     //   "description": "PostgreSQL database password"
     // },
@@ -36,6 +38,7 @@
       "extensions": [
         "anthropic.claude-code",
         "ms-azuretools.vscode-docker",
+        // PostgreSQL only: uncomment the line below when switching to PostgreSQL
         // "ckolkman.vscode-postgres",
         "esbenp.prettier-vscode",
         "humao.rest-client"

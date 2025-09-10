@@ -6,6 +6,7 @@ echo "=== n8n Secret Setup ==="
 
 # Check if secrets are missing
 missing_secrets=""
+# PostgreSQL only: uncomment the block below when switching to PostgreSQL
 # if [ -z "$DB_PASSWORD" ]; then
 #     missing_secrets="$missing_secrets DB_PASSWORD"
 # fi

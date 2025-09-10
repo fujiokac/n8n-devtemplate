@@ -17,6 +17,7 @@ else
 fi
 
 # Add secrets from Codespaces Secrets
+# PostgreSQL only: uncomment the block below when switching to PostgreSQL
 # if [ -n "$DB_PASSWORD" ]; then
 #     export DB_POSTGRESDB_PASSWORD="$DB_PASSWORD"
 #     echo "✅ DB_PASSWORD configured"
