@@ -19,31 +19,54 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-ENCRYPTED_FILE="$1"
+BACKUP_FILE="$1"
 
-echo "Restoring n8n backup from: $ENCRYPTED_FILE"
+echo "Restoring n8n backup from: $BACKUP_FILE"
 
-# Check if backup key is available
-if [ -z "$N8N_BACKUP_KEY" ]; then
+# Detect if backup is encrypted
+IS_ENCRYPTED=false
+case "$BACKUP_FILE" in
+    *.tar.gz.enc)
+        IS_ENCRYPTED=true
+        echo "Detected encrypted backup"
+        ;;
+    *.tar.gz)
+        IS_ENCRYPTED=false
+        echo "Detected unencrypted backup"
+        ;;
+    *)
+        echo "Error: Unsupported backup file format. Expected *.tar.gz.enc or *.tar.gz"
+        echo "Provided: $BACKUP_FILE"
+        exit 1
+        ;;
+esac
+
+# Check if backup key is available (only for encrypted backups)
+if [ "$IS_ENCRYPTED" = "true" ] && [ -z "$N8N_BACKUP_KEY" ]; then
     echo "Error: N8N_BACKUP_KEY environment variable not set"
     echo "This backup was encrypted with a specific key that must be configured"
     echo "in your GitHub Codespace secrets to decrypt it."
     exit 1
 fi
 
-# Verify encrypted file exists
-if [ ! -f "$ENCRYPTED_FILE" ]; then
-    echo "Error: Backup file '$ENCRYPTED_FILE' not found"
+# Verify backup file exists
+if [ ! -f "$BACKUP_FILE" ]; then
+    echo "Error: Backup file '$BACKUP_FILE' not found"
     exit 1
 fi
 
 # Create temporary directory
 mkdir -p "$TEMP_DIR"
 
-# Decrypt archive
-echo "Decrypting backup..."
-ARCHIVE_FILE="$TEMP_DIR/backup.tar.gz"
-"$SCRIPT_DIR/decrypt-backup.sh" "$ENCRYPTED_FILE" "$ARCHIVE_FILE"
+# Handle encrypted or unencrypted archives
+if [ "$IS_ENCRYPTED" = "true" ]; then
+    echo "Decrypting backup..."
+    ARCHIVE_FILE="$TEMP_DIR/backup.tar.gz"
+    "$SCRIPT_DIR/decrypt-backup.sh" "$BACKUP_FILE" "$ARCHIVE_FILE"
+else
+    echo "Using unencrypted backup..."
+    ARCHIVE_FILE="$BACKUP_FILE"
+fi
 
 # Extract archive
 echo "Extracting backup..."
