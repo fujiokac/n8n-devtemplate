@@ -86,3 +86,6 @@ else
     echo "To commit backup to git:"
     echo "$SCRIPT_DIR/commit-backup-to-git.sh '$ENCRYPTED_FILE'"
 fi
+
+# Return backup file path for orchestrator scripts
+echo "BACKUP_FILE:$ENCRYPTED_FILE"
