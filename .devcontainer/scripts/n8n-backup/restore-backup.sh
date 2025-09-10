@@ -58,7 +58,9 @@ if [ ! -d "$TEMP_DIR/n8n-data" ]; then
 fi
 
 # Stop n8n if running (optional - user should handle this)
-echo "Note: Make sure n8n is stopped before restoring"
+# Stop n8n before restoring
+echo "Stopping n8n before restore..."
+"$PWD/stop-n8n"
 
 # Create n8n data directory if it doesn't exist
 mkdir -p "$N8N_DATA_DIR"
