@@ -10,7 +10,8 @@ LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-$(date +%Y%m%d-%H%M%S).log"
 exec > >(tee "$LOG_FILE") 2>&1
 
 SCRIPT_DIR="$(dirname "$0")"
-BACKUP_NAME="${1:-n8n-backup-$(date +%Y%m%d-%H%M%S)}"
+GIT_USER="$(git config user.name | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
+BACKUP_NAME="${1:-${GIT_USER}_n8n-backup-$(date +%Y%m%d-%H%M%S)}"
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-backup-$$"
 
