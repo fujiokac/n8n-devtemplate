@@ -32,15 +32,18 @@ else
 fi
 
 # Log secret status (non-interactive)
-if [ -z "$DB_PASSWORD" ]; then
-    echo "ℹ️  DB_PASSWORD secret not configured"
-fi
+# PostgreSQL only: uncomment the block below when switching to PostgreSQL
+# if [ -z "$DB_PASSWORD" ]; then
+#     echo "ℹ️  DB_PASSWORD secret not configured"
+# fi
 
 if [ -z "$N8N_ENCRYPTION_KEY" ]; then
     echo "ℹ️  N8N_ENCRYPTION_KEY secret not configured"
 fi
 
-if [ -n "$DB_PASSWORD" ] && [ -n "$N8N_ENCRYPTION_KEY" ]; then
+# PostgreSQL only: uncomment the condition below when switching to PostgreSQL
+# if [ -n "$DB_PASSWORD" ] && [ -n "$N8N_ENCRYPTION_KEY" ]; then
+if [ -n "$N8N_ENCRYPTION_KEY" ]; then
     echo "✅ Required secrets configured"
 else
     echo "ℹ️  Some secrets missing - will be prompted to set up on first attach"
