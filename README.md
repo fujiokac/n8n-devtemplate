@@ -61,3 +61,27 @@ To manually trigger template updates, go to **Actions** → **"Template Sync"** 
 ## Data Persistence
 
 - **n8n workflows**: Stored in `n8n_data/` directory (persists across container rebuilds)
+
+### Creating Backups
+
+```sh
+# Create encrypted backup and commit to git
+./n8n-backup
+```
+
+### Restoring Backups
+
+```sh
+# Restore latest backup from git
+./n8n-restore
+
+# Restore specific backup file
+./n8n-restore /path/to/backup.tar.gz.enc
+./n8n-restore /path/to/backup.tar.gz  # unencrypted
+```
+
+**Notes:**
+- Backups are encrypted using `N8N_BACKUP_KEY` secret
+- Unencrypted `.tar.gz` backups are also supported
+- Credentials are not restored for security - re-enter manually
+- Workflows are imported in deactivated state
