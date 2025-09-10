@@ -60,8 +60,7 @@ fi
 # Create archive
 echo "Creating archive..."
 ARCHIVE_FILE="$TEMP_DIR/$BACKUP_NAME.tar.gz"
-cd "$TEMP_DIR"
-tar -czf "$ARCHIVE_FILE" n8n-data/
+tar -czf "$ARCHIVE_FILE" -C "$TEMP_DIR" n8n-data/
 
 # Create backup directory
 BACKUP_DIR="${TMPDIR:-/tmp}/n8n-backups"
