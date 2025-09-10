@@ -17,13 +17,13 @@ else
 fi
 
 # Add secrets from Codespaces Secrets
-if [ -n "$DB_PASSWORD" ]; then
-    export DB_POSTGRESDB_PASSWORD="$DB_PASSWORD"
-    echo "✅ DB_PASSWORD configured"
-else
-    echo "❌ DB_PASSWORD missing from Codespaces Secrets"
-    exit 1
-fi
+# if [ -n "$DB_PASSWORD" ]; then
+#     export DB_POSTGRESDB_PASSWORD="$DB_PASSWORD"
+#     echo "✅ DB_PASSWORD configured"
+# else
+#     echo "❌ DB_PASSWORD missing from Codespaces Secrets"
+#     exit 1
+# fi
 
 if [ -n "$N8N_ENCRYPTION_KEY" ]; then
     export N8N_ENCRYPTION_KEY="$N8N_ENCRYPTION_KEY"

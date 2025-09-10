@@ -6,9 +6,9 @@ echo "=== n8n Secret Setup ==="
 
 # Check if secrets are missing
 missing_secrets=""
-if [ -z "$DB_PASSWORD" ]; then
-    missing_secrets="$missing_secrets DB_PASSWORD"
-fi
+# if [ -z "$DB_PASSWORD" ]; then
+#     missing_secrets="$missing_secrets DB_PASSWORD"
+# fi
 if [ -z "$N8N_ENCRYPTION_KEY" ]; then
     missing_secrets="$missing_secrets N8N_ENCRYPTION_KEY"
 fi

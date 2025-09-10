@@ -15,14 +15,14 @@
   "remoteEnv": {
     "LOGS_DIR": "logs",
     "N8N_USER_FOLDER": "/workspaces/n8n_data",
-    "DB_PASSWORD": "${localEnv:DB_PASSWORD}",
+    // "DB_PASSWORD": "${localEnv:DB_PASSWORD}",
     "N8N_ENCRYPTION_KEY": "${localEnv:N8N_ENCRYPTION_KEY}"
   },
   
   "secrets": {
-    "DB_PASSWORD": {
-      "description": "PostgreSQL database password"
-    },
+    // "DB_PASSWORD": {
+    //   "description": "PostgreSQL database password"
+    // },
     "N8N_ENCRYPTION_KEY": {
       "description": "n8n data encryption key"
     }
@@ -36,7 +36,7 @@
       "extensions": [
         "anthropic.claude-code",
         "ms-azuretools.vscode-docker",
-        "ckolkman.vscode-postgres",
+        // "ckolkman.vscode-postgres",
         "esbenp.prettier-vscode",
         "humao.rest-client"
       ],
