@@ -7,7 +7,7 @@
 set -e
 
 # Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-restore-from-git-$(date +%Y%m%d-%H%M%S).log"
+LOG_FILE="${LOGS_DIR:-logs}/n8n-restore-from-git.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
 SCRIPT_DIR="$(dirname "$0")"

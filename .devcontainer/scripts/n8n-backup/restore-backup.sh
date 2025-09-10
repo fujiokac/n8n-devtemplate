@@ -6,7 +6,7 @@
 set -e
 
 # Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore-$(date +%Y%m%d-%H%M%S).log"
+LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
 SCRIPT_DIR="$(dirname "$0")"

@@ -6,7 +6,7 @@
 set -e
 
 # Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-commit-$(date +%Y%m%d-%H%M%S).log"
+LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-commit.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
 if [ $# -ne 1 ]; then
