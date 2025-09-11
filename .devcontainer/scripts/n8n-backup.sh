@@ -9,6 +9,10 @@ set -e
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
+# Setup logging
+LOG_FILE="${LOGS_DIR:-logs}/n8n-backup.log"
+exec > >(tee "$LOG_FILE") 2>&1
+
 # Check for help and restore arguments
 case "${1:-}" in
     -h|--help|help)

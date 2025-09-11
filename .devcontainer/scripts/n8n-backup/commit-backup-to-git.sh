@@ -5,10 +5,6 @@
 
 set -e
 
-# Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-commit.log"
-exec > >(tee "$LOG_FILE") 2>&1
-
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <backup_file>"
     echo "Example: $0 \${TMPDIR:-/tmp}/n8n-backups/n8n-backup-20250901-143022.tar.gz.enc"

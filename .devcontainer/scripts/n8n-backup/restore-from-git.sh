@@ -6,10 +6,6 @@
 
 set -e
 
-# Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-restore-from-git.log"
-exec > >(tee "$LOG_FILE") 2>&1
-
 # First parameter is the scripts directory
 SCRIPT_DIR="$1"
 shift

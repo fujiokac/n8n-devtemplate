@@ -10,6 +10,10 @@ set -e
 SCRIPT_DIR="$1"
 shift
 
+# Setup logging
+LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore.log"
+exec > >(tee "$LOG_FILE") 2>&1
+
 # Check for help argument
 case "${1:-}" in
     -h|--help|help)

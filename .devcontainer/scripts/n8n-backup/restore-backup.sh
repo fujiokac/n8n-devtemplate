@@ -5,10 +5,6 @@
 
 set -e
 
-# Setup logging
-LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore.log"
-exec > >(tee "$LOG_FILE") 2>&1
-
 # First parameter is the scripts directory
 SCRIPT_DIR="$1"
 shift
@@ -83,10 +79,9 @@ if [ ! -d "$TEMP_DIR/n8n-data" ]; then
     exit 1
 fi
 
-# Stop n8n if running (optional - user should handle this)
 # Stop n8n before restoring
 echo "Stopping n8n before restore..."
-"$PWD/stop-n8n"
+"$SCRIPT_DIR/stop-n8n.sh"
 
 # Create n8n data directory if it doesn't exist
 mkdir -p "$N8N_DATA_DIR"
