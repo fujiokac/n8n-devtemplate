@@ -9,11 +9,15 @@ set -e
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
-# Check for help argument
+# Check for help and restore arguments
 case "${1:-}" in
     -h|--help|help)
         cat "$SCRIPT_DIR/n8n-backup.help"
         exit 0
+        ;;
+    --restore)
+        shift
+        exec "$SCRIPT_DIR/n8n-restore.sh" "$SCRIPT_DIR" "$@"
         ;;
 esac
 

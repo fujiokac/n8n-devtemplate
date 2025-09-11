@@ -2,22 +2,30 @@ n8n Backup Orchestrator
 
 USAGE:
     n8n-backup [OPTIONS] [backup-name]
+    n8n-backup --restore [backup-file]
 
 DESCRIPTION:
     Creates an encrypted backup of n8n data (workflows, credentials, binary data)
     and commits it to the 'backups' git branch for safe storage.
+    
+    With --restore flag, restores n8n data from encrypted backups instead.
 
 OPTIONS:
     -h, --help      Show this help message
+    --restore       Restore mode - restores instead of backing up
     
 ARGUMENTS:
     backup-name     Optional custom name for the backup
                    Default: username_n8n-backup-YYYYMMDD-HHMMSS
+    backup-file     (restore mode) Optional path to backup file
+                   If not provided, fetches latest from git
 
 EXAMPLES:
-    n8n-backup                      # Create backup with default name
-    n8n-backup my-project-backup    # Create backup with custom name
-    n8n-backup --help               # Show this help
+    n8n-backup                           # Create backup with default name
+    n8n-backup my-project-backup         # Create backup with custom name
+    n8n-backup --restore                 # Restore latest from git
+    n8n-backup --restore /path/to/backup.tar.gz.enc  # Restore specific file
+    n8n-backup --help                    # Show this help
 
 REQUIREMENTS:
     - N8N_ENCRYPTION_KEY: Set as GitHub Codespace secret

@@ -2,12 +2,13 @@
 
 # n8n Restore Orchestrator
 # Restores n8n data from encrypted backups (local or git)
+# Usage: n8n-restore.sh <scripts_dir> [OPTIONS] [backup-file]
 
 set -e
 
-# Get the real path of the script, following symlinks
-SCRIPT_PATH="$(readlink -f "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+# First parameter is the scripts directory
+SCRIPT_DIR="$1"
+shift
 
 # Check for help argument
 case "${1:-}" in
