@@ -5,7 +5,9 @@
 
 set -e
 
-SCRIPT_DIR="$(dirname "$0")"
+# Get the real path of the script, following symlinks
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 # Check for help argument
 case "${1:-}" in
@@ -22,11 +24,11 @@ if [ $# -gt 0 ] && [ -f "$1" ]; then
     # Local file restore
     BACKUP_FILE="$1"
     echo "Restoring from local file: $BACKUP_FILE"
-    "$SCRIPT_DIR/n8n-backup/restore-backup.sh" "$BACKUP_FILE"
+    "$SCRIPT_DIR/n8n-backup/restore-backup.sh" "$SCRIPT_DIR" "$BACKUP_FILE"
 else
     # Restore from git
     echo "Fetching latest backup from git..."
-    "$SCRIPT_DIR/n8n-backup/restore-from-git.sh" "$@"
+    "$SCRIPT_DIR/n8n-backup/restore-from-git.sh" "$SCRIPT_DIR" "$@"
 fi
 
 echo ""

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Create encrypted backup of n8n workflows and custom nodes
-# Usage: create-backup.sh [backup_name] [--auto-commit]
+# Usage: create-backup.sh <scripts_dir> [backup_name] [--auto-commit]
 
 set -e
 
@@ -9,7 +9,10 @@ set -e
 LOG_FILE="${LOGS_DIR:-logs}/n8n-backup.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
-SCRIPT_DIR="$(dirname "$0")"
+# First parameter is the scripts directory
+SCRIPT_DIR="$1"
+shift
+
 GIT_USER="$(git config user.name | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
 BACKUP_NAME="${1:-${GIT_USER}_n8n-backup-$(date +%Y%m%d-%H%M%S)}"
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
@@ -69,7 +72,7 @@ mkdir -p "$BACKUP_DIR"
 # Encrypt archive
 echo "Encrypting backup..."
 ENCRYPTED_FILE="$BACKUP_DIR/$BACKUP_NAME.tar.gz.enc"
-"$SCRIPT_DIR/encrypt-backup.sh" "$ARCHIVE_FILE" "$ENCRYPTED_FILE"
+"$SCRIPT_DIR/n8n-backup/encrypt-backup.sh" "$ARCHIVE_FILE" "$ENCRYPTED_FILE"
 
 # Cleanup temp extraction
 rm -rf "$TEMP_DIR"
@@ -81,10 +84,10 @@ echo ""
 # Auto-commit if requested
 if [ "$1" = "--auto-commit" ] || [ "$2" = "--auto-commit" ]; then
     echo "Auto-committing to git..."
-    "$SCRIPT_DIR/commit-backup-to-git.sh" "$ENCRYPTED_FILE"
+    "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh" "$ENCRYPTED_FILE"
 else
     echo "To commit backup to git:"
-    echo "$SCRIPT_DIR/commit-backup-to-git.sh '$ENCRYPTED_FILE'"
+    echo "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh '$ENCRYPTED_FILE'"
 fi
 
 # Return backup file path for orchestrator scripts

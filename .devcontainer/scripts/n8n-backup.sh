@@ -5,7 +5,9 @@
 
 set -e
 
-SCRIPT_DIR="$(dirname "$0")"
+# Get the real path of the script, following symlinks
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 # Check for help argument
 case "${1:-}" in
@@ -19,7 +21,7 @@ echo "=== n8n Backup ==="
 
 # Run backup creation and capture output
 echo "Creating backup..."
-BACKUP_OUTPUT=$("$SCRIPT_DIR/n8n-backup/create-backup.sh" "$@")
+BACKUP_OUTPUT=$("$SCRIPT_DIR/n8n-backup/create-backup.sh" "$SCRIPT_DIR" "$@")
 echo "$BACKUP_OUTPUT"
 
 # Extract backup filename from the output

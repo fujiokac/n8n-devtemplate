@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Restore encrypted backup of n8n workflows and custom nodes
-# Usage: restore-backup.sh <encrypted_backup_file>
+# Usage: restore-backup.sh <scripts_dir> <encrypted_backup_file>
 
 set -e
 
@@ -9,13 +9,16 @@ set -e
 LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
-SCRIPT_DIR="$(dirname "$0")"
+# First parameter is the scripts directory
+SCRIPT_DIR="$1"
+shift
+
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-restore-$$"
 
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 <encrypted_backup_file>"
-    echo "Example: $0 n8n-backup-20250901-143022.tar.gz.enc"
+    echo "Usage: $0 <scripts_dir> <encrypted_backup_file>"
+    echo "Example: $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz.enc"
     exit 1
 fi
 
@@ -62,7 +65,7 @@ mkdir -p "$TEMP_DIR"
 if [ "$IS_ENCRYPTED" = "true" ]; then
     echo "Decrypting backup..."
     ARCHIVE_FILE="$TEMP_DIR/backup.tar.gz"
-    "$SCRIPT_DIR/decrypt-backup.sh" "$BACKUP_FILE" "$ARCHIVE_FILE"
+    "$SCRIPT_DIR/n8n-backup/decrypt-backup.sh" "$BACKUP_FILE" "$ARCHIVE_FILE"
 else
     echo "Using unencrypted backup..."
     ARCHIVE_FILE="$BACKUP_FILE"
