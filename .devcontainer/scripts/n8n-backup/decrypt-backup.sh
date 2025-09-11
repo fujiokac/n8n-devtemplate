@@ -32,6 +32,6 @@ mkdir -p "$OUTPUT_DIR"
 
 # Decrypt the file
 echo "Decrypting $ENCRYPTED_FILE..."
-openssl enc -aes-256-cbc -d -salt -in "$ENCRYPTED_FILE" -out "$OUTPUT_FILE" -pass env:N8N_BACKUP_KEY
+openssl enc -aes-256-cbc -d -salt -pbkdf2 -in "$ENCRYPTED_FILE" -out "$OUTPUT_FILE" -pass env:N8N_BACKUP_KEY
 
 echo "File decrypted successfully: $OUTPUT_FILE"

@@ -32,6 +32,6 @@ mkdir -p "$OUTPUT_DIR"
 
 # Encrypt the file
 echo "Encrypting $INPUT_FILE..."
-openssl enc -aes-256-cbc -salt -in "$INPUT_FILE" -out "$OUTPUT_FILE" -pass env:N8N_BACKUP_KEY
+openssl enc -aes-256-cbc -salt -pbkdf2 -in "$INPUT_FILE" -out "$OUTPUT_FILE" -pass env:N8N_BACKUP_KEY
 
 echo "File encrypted successfully: $OUTPUT_FILE"
