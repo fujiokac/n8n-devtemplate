@@ -1,16 +1,19 @@
 # Claude Code Preferences
 
-## POSIX Compliance
-- Use `sh` unless explicitly required otherwise
-- Use `sh` syntax highlighting in documentation
-- Write new scripts with `#!/bin/sh` shebang
-
 ## Git Guidelines
-- Don't include Claude authorship attribution
+- NEVER include Claude authorship attribution in ANY context (commits, PRs, code comments, etc.)
+- NEVER add "Generated with Claude Code" or similar attribution
+- NEVER add "Co-Authored-By: Claude" or any variation
 - Keep descriptions concise and focused
 - Focus on what changed and why, not implementation details
 - Don't mention specific files in commit messages (git tracks that automatically)
 - Use git stashing when doing branch operations to prevent conflicts
+- When user says "boop", interpret this as "push changes"
+
+## POSIX Compliance
+- Use `sh` unless explicitly required otherwise
+- Use `sh` syntax highlighting in documentation
+- Write new scripts with `#!/bin/sh` shebang
 
 ## Script Development Patterns
 - Always make paths configurable via environment variables (use `${TMPDIR:-/tmp}` not `/tmp`)

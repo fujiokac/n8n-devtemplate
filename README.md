@@ -23,6 +23,7 @@ Before creating your Codespace, add these secrets in GitHub:
 |-------------|---------|-------------------|
 | `DB_PASSWORD` | PostgreSQL database password | `openssl rand -base64 32` |
 | `N8N_ENCRYPTION_KEY` | n8n data encryption key | `openssl rand -base64 32` |
+| `N8N_BACKUP_KEY` | Backup encryption key | `openssl rand -base64 32` |
 
 ### 3. Open in Codespaces
 
@@ -61,3 +62,31 @@ To manually trigger template updates, go to **Actions** → **"Template Sync"** 
 ## Data Persistence
 
 - **n8n workflows**: Stored in `n8n_data/` directory (persists across container rebuilds)
+
+### Creating Backups
+
+```sh
+# Create encrypted backup and commit to git
+./n8n-backup
+
+# Create backup with custom name
+./n8n-backup my-project-backup
+```
+
+### Restoring Backups
+
+```sh
+# Restore latest backup from git
+./n8n-backup --restore
+
+# Restore specific backup file
+./n8n-backup --restore /path/to/backup.tar.gz.enc
+./n8n-backup --restore /path/to/backup.tar.gz  # unencrypted
+```
+
+**Notes:**
+- Backups are encrypted using `N8N_BACKUP_KEY` secret
+- Unencrypted `.tar.gz` backups are also supported
+- Credentials are not restored for security - re-enter manually
+- Workflows are imported in deactivated state
+- **Important**: Workflows with same ID/name will be replaced during restore
