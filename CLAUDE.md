@@ -29,6 +29,17 @@
 - Exit quietly when no action is needed (don't spam logs with "nothing to do" messages)
 - Make retention policies and similar values configurable via .env files
 
+## Core Principles
+  - No fluff or filler text - Get to the point immediately
+  - No invented data - Only use actual information provided or discovered
+  - Match the document's purpose - High-level docs stay high-level, technical docs stay technical
+  - Stop when done - Don't elaborate unless asked
+
+## Writing Style
+  - No sales language - Avoid marketing speak, benefits lists, or persuasive tone
+  - Appropriate detail level - Design docs get specifics, summaries get essentials only
+  - No repetition - Don't restate the same information in different formats
+    
 ## Session Management
 When the user says "end session", create or update logs/SESSION_LOG.md.log with:
 - Major changes made during the session
