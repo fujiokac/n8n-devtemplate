@@ -41,7 +41,8 @@
         // PostgreSQL only: uncomment the line below when switching to PostgreSQL
         // "ckolkman.vscode-postgres",
         "esbenp.prettier-vscode",
-        "humao.rest-client"
+        "humao.rest-client",
+        "github.vscode-github-actions"
       ],
       "settings": {
         "editor.formatOnSave": true,
