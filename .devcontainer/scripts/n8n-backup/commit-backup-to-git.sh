@@ -7,7 +7,7 @@ set -e
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <backup_file>"
-    echo "Example: $0 \${TMPDIR:-/tmp}/n8n-backups/n8n-backup-20250901-143022.tar.gz.enc"
+    echo "Example: $0 \${TMPDIR:-/tmp}/n8n-backups/n8n-backup-20250901-143022.tar.gz"
     exit 1
 fi
 
@@ -45,8 +45,17 @@ fi
 # Create or switch to orphan backup branch
 git checkout --orphan "$BACKUP_BRANCH" 2>/dev/null || git checkout "$BACKUP_BRANCH"
 
-# Clean working directory if switching to existing orphan branch
-git rm -rf . 2>/dev/null || true
+# Initialize git-crypt on first use of this branch
+if [ ! -f .gitattributes ]; then
+    echo "Setting up git-crypt on backups branch..."
+    git-crypt init 2>/dev/null || true  # May already be initialized
+    echo "*.tar.gz filter=git-crypt diff=git-crypt" > .gitattributes
+    git add .gitattributes
+    git commit -m "Initialize git-crypt for encrypted backups" 2>/dev/null || true
+fi
+
+# Clean working directory if switching to existing orphan branch (except .gitattributes)
+git ls-files | grep -v "^\.gitattributes$" | xargs git rm -f 2>/dev/null || true
 
 # Copy and add the backup file
 cp "$BACKUP_FILE" "$BACKUP_NAME"
@@ -56,7 +65,7 @@ git add "$BACKUP_NAME"
 MAX_BACKUPS="${N8N_BACKUP_RETENTION:-5}"
 
 # Get list of existing backup files and remove oldest ones
-EXISTING_BACKUPS=$(git ls-files "*.tar.gz.enc" 2>/dev/null | sort -r || true)
+EXISTING_BACKUPS=$(git ls-files "*.tar.gz" 2>/dev/null | sort -r || true)
 BACKUP_COUNT=$(echo "$EXISTING_BACKUPS" | wc -l)
 
 if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then

@@ -16,12 +16,7 @@ TEMP_DIR="${TMPDIR:-/tmp}/n8n-backup-$$"
 
 echo "Creating n8n backup: $BACKUP_NAME"
 
-# Check if backup key is available
-if [ -z "$N8N_BACKUP_KEY" ]; then
-    echo "Error: N8N_BACKUP_KEY environment variable not set"
-    echo "Run the post-attach script to generate and configure the backup key"
-    exit 1
-fi
+# Note: Encryption is now handled by git-crypt, no backup key needed
 
 # Create temporary directory
 mkdir -p "$TEMP_DIR/n8n-data"
@@ -56,35 +51,30 @@ else
     echo "Info: nodes directory not found - no custom nodes to backup"
 fi
 
-# Create archive
-echo "Creating archive..."
-ARCHIVE_FILE="$TEMP_DIR/$BACKUP_NAME.tar.gz"
-tar -czf "$ARCHIVE_FILE" -C "$TEMP_DIR" n8n-data/
-
 # Create backup directory
 BACKUP_DIR="${TMPDIR:-/tmp}/n8n-backups"
 mkdir -p "$BACKUP_DIR"
 
-# Encrypt archive
-echo "Encrypting backup..."
-ENCRYPTED_FILE="$BACKUP_DIR/$BACKUP_NAME.tar.gz.enc"
-"$SCRIPT_DIR/n8n-backup/encrypt-backup.sh" "$ARCHIVE_FILE" "$ENCRYPTED_FILE"
+# Create archive directly in final location
+echo "Creating archive..."
+BACKUP_FILE="$BACKUP_DIR/$BACKUP_NAME.tar.gz"
+tar -czf "$BACKUP_FILE" -C "$TEMP_DIR" n8n-data/
 
 # Cleanup temp extraction
 rm -rf "$TEMP_DIR"
 
-echo "Backup created successfully: $ENCRYPTED_FILE"
-echo "Size: $(du -h "$ENCRYPTED_FILE" | cut -f1)"
+echo "Backup created successfully: $BACKUP_FILE"
+echo "Size: $(du -h "$BACKUP_FILE" | cut -f1)"
 echo ""
 
 # Auto-commit if requested
 if [ "$1" = "--auto-commit" ] || [ "$2" = "--auto-commit" ]; then
     echo "Auto-committing to git..."
-    "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh" "$ENCRYPTED_FILE"
+    "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh" "$BACKUP_FILE"
 else
     echo "To commit backup to git:"
-    echo "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh '$ENCRYPTED_FILE'"
+    echo "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh '$BACKUP_FILE'"
 fi
 
 # Return backup file path for orchestrator scripts
-echo "BACKUP_FILE:$ENCRYPTED_FILE"
+echo "BACKUP_FILE:$BACKUP_FILE"

@@ -7,6 +7,7 @@ RUN apk add --no-cache \
     shadow \
     sudo \
     git-lfs \
+    git-crypt \
     postgresql \
     postgresql-contrib \
     ripgrep \
