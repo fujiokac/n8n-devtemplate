@@ -11,8 +11,8 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-BACKUP_FILE="$1"
-BACKUP_NAME="$(basename "$BACKUP_FILE")"
+TEMP_BACKUP="$1"
+BACKUP_DESTINATION="secrets/backups/$(basename "$TEMP_BACKUP")"
 
 # Check if backup branch is configured
 if [ -z "$N8N_BACKUP_BRANCH" ]; then
@@ -23,11 +23,11 @@ fi
 
 BACKUP_BRANCH="$N8N_BACKUP_BRANCH"
 
-echo "Committing backup to git: $BACKUP_NAME"
+echo "Committing backup to git: $(basename "$TEMP_BACKUP")"
 
 # Verify backup file exists
-if [ ! -f "$BACKUP_FILE" ]; then
-    echo "Error: Backup file '$BACKUP_FILE' not found"
+if [ ! -f "$TEMP_BACKUP" ]; then
+    echo "Error: Backup file '$TEMP_BACKUP' not found"
     exit 1
 fi
 
@@ -45,27 +45,30 @@ fi
 # Create or switch to orphan backup branch
 git checkout --orphan "$BACKUP_BRANCH" 2>/dev/null || git checkout "$BACKUP_BRANCH"
 
-# Initialize git-crypt on first use of this branch
+# Initialize git-crypt and secrets structure on first use of this branch
 if [ ! -f .gitattributes ]; then
-    echo "Setting up git-crypt on backups branch..."
+    echo "Setting up git-crypt and secrets structure on backups branch..."
     git-crypt init 2>/dev/null || true  # May already be initialized
-    echo "*.tar.gz filter=git-crypt diff=git-crypt" > .gitattributes
+    echo "secrets/** filter=git-crypt diff=git-crypt" > .gitattributes
     git add .gitattributes
-    git commit -m "Initialize git-crypt for encrypted backups" 2>/dev/null || true
+    git commit -m "Initialize git-crypt for encrypted secrets" 2>/dev/null || true
 fi
 
-# Clean working directory if switching to existing orphan branch (except .gitattributes)
-git ls-files | grep -v "^\.gitattributes$" | xargs git rm -f 2>/dev/null || true
+# Ensure secrets/backups directory exists
+mkdir -p secrets/backups
 
-# Copy and add the backup file
-cp "$BACKUP_FILE" "$BACKUP_NAME"
-git add "$BACKUP_NAME"
+# Clean working directory if switching to existing orphan branch (except .gitattributes and secrets/)
+git ls-files | grep -v "^\.gitattributes$" | grep -v "^secrets/" | xargs git rm -f 2>/dev/null || true
+
+# Copy backup file to secrets/backups/ folder
+cp "$TEMP_BACKUP" "$BACKUP_DESTINATION"
+git add "$BACKUP_DESTINATION"
 
 # Keep only the last N backups (default: 5)
 MAX_BACKUPS="${N8N_BACKUP_RETENTION:-5}"
 
 # Get list of existing backup files and remove oldest ones
-EXISTING_BACKUPS=$(git ls-files "*.tar.gz" 2>/dev/null | sort -r || true)
+EXISTING_BACKUPS=$(git ls-files "secrets/backups/*.tar.gz" 2>/dev/null | sort -r || true)
 BACKUP_COUNT=$(echo "$EXISTING_BACKUPS" | wc -l)
 
 if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then
@@ -80,9 +83,9 @@ if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then
 fi
 
 # Commit the backup
-git commit -m "Add n8n backup: $BACKUP_NAME"
+git commit -m "Add n8n backup: $(date +%Y-%m-%d)"
 
-BACKUP_SIZE=$(du -h "$BACKUP_NAME" | cut -f1)
+BACKUP_SIZE=$(du -h "$BACKUP_DESTINATION" | cut -f1)
 
 # Switch back to original branch
 git checkout "$CURRENT_BRANCH"
@@ -94,7 +97,7 @@ if [ "$STASH_CREATED" = true ]; then
 fi
 
 echo "✅ Backup committed to '$BACKUP_BRANCH' branch"
-echo "   File: $BACKUP_NAME"
+echo "   File: $(basename "$TEMP_BACKUP")"
 echo "   Size: $BACKUP_SIZE"
 echo ""
 echo "To push backup to remote:"
