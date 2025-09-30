@@ -28,12 +28,17 @@ exec > >(tee "$LOG_FILE") 2>&1
 
 echo "=== n8n Backup ==="
 
-# Run backup creation and capture output
-echo "Creating backup..."
-BACKUP_OUTPUT=$("$BACKUP_HELPERS_DIR/create-backup.sh" "$@")
-echo "$BACKUP_OUTPUT"
+# Check if n8n is running
+if ! pgrep -f "n8n" > /dev/null; then
+    echo "Error: n8n is not running"
+    echo "Please start n8n first: ./start-n8n"
+    exit 1
+fi
 
-# Extract backup filename from the output
+# Run backup creation
+echo "Creating backup..."
+BACKUP_OUTPUT=$("$BACKUP_HELPERS_DIR/create-backup.sh" "$@" 2>&1 | tee /dev/stderr)
+
 BACKUP_FILE=$(echo "$BACKUP_OUTPUT" | grep "BACKUP_FILE:" | cut -d: -f2)
 
 if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
