@@ -22,16 +22,11 @@ else
 fi
 
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
-BACKUP_SCRIPT_DIR="$WORKSPACE_DIR/.devcontainer/scripts/n8n-backup"
+BACKUP_HELPERS_DIR="$WORKSPACE_DIR/.devcontainer/scripts/n8n-backup-helpers"
+BACKUPS_PATH="${N8N_BACKUPS_PATH:-secrets/backups}"
 
 echo "=== n8n Backup Status ==="
 
-# Check if backup key is configured
-if [ -z "$N8N_BACKUP_KEY" ]; then
-    echo "ℹ️  N8N_BACKUP_KEY not configured - cannot restore encrypted backups"
-    echo "   Configure the backup key in GitHub Codespace secrets to enable restoration"
-    exit 0
-fi
 
 # Check for available backups
 
@@ -44,7 +39,7 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
     
     # Try to get backups - exit quietly if none found
     if git fetch origin "$BACKUP_BRANCH:$BACKUP_BRANCH" 2>/dev/null && \
-       AVAILABLE_BACKUPS=$(git show "$BACKUP_BRANCH:" 2>/dev/null | grep -E "\.tar\.gz\.enc$" | sort -r) && \
+       AVAILABLE_BACKUPS=$(git show "$BACKUP_BRANCH:$BACKUPS_PATH" 2>/dev/null | grep -E "\.tar\.gz$" | sort -r) && \
        [ -n "$AVAILABLE_BACKUPS" ]; then
         
         BACKUP_COUNT=$(echo "$AVAILABLE_BACKUPS" | wc -l)
