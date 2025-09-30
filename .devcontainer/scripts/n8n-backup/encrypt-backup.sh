@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Encrypt a file using OpenSSL with AES-256-CBC
+# NOTE: This script is preserved for flexibility but not used by default
+# Current backup system uses git-crypt for automatic encryption
 # Usage: encrypt-backup.sh <input_file> <output_file>
 
 set -e

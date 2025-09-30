@@ -51,8 +51,8 @@ else
     echo "Info: nodes directory not found - no custom nodes to backup"
 fi
 
-# Create backup directory
-BACKUP_DIR="${TMPDIR:-/tmp}/n8n-backups"
+# Create backup in configured directory (encrypted by git-crypt)
+BACKUP_DIR="${N8N_BACKUPS_PATH:-secrets/backups}"
 mkdir -p "$BACKUP_DIR"
 
 # Create archive directly in final location

@@ -82,6 +82,10 @@ temp/
 # Unused/archived files
 *.unused
 
+# Local backup files (uploaded to orphan branch separately)
+# Note: This should match N8N_BACKUPS_PATH in .env
+secrets/backups/
+
 # OS
 .DS_Store
 .DS_Store?

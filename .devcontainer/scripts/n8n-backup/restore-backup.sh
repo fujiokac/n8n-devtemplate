@@ -1,7 +1,9 @@
 #!/bin/sh
 
-# Restore encrypted backup of n8n workflows and custom nodes
-# Usage: restore-backup.sh <scripts_dir> <encrypted_backup_file>
+# Restore backup of n8n workflows and custom nodes
+# NOTE: This script supports legacy encrypted backups (.tar.gz.enc) for compatibility
+# Current backup system uses git-crypt for encryption (plain .tar.gz files)
+# Usage: restore-backup.sh <scripts_dir> <backup_file>
 
 set -e
 
@@ -13,8 +15,9 @@ N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-restore-$$"
 
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 <scripts_dir> <encrypted_backup_file>"
-    echo "Example: $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz.enc"
+    echo "Usage: $0 <scripts_dir> <backup_file>"
+    echo "Example: $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz"
+    echo "         $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz.enc (legacy)"
     exit 1
 fi
 

@@ -12,7 +12,8 @@ if [ $# -ne 1 ]; then
 fi
 
 TEMP_BACKUP="$1"
-BACKUP_DESTINATION="secrets/backups/$(basename "$TEMP_BACKUP")"
+BACKUPS_PATH="${N8N_BACKUPS_PATH:-secrets/backups}"
+BACKUP_DESTINATION="$BACKUPS_PATH/$(basename "$TEMP_BACKUP")"
 
 # Check if backup branch is configured
 if [ -z "$N8N_BACKUP_BRANCH" ]; then
@@ -45,8 +46,8 @@ fi
 # Create or switch to orphan backup branch
 git checkout --orphan "$BACKUP_BRANCH" 2>/dev/null || git checkout "$BACKUP_BRANCH"
 
-# Ensure secrets/backups directory exists
-mkdir -p secrets/backups
+# Ensure backups directory exists
+mkdir -p "$BACKUPS_PATH"
 
 # Clean working directory if switching to existing orphan branch (except .gitattributes and secrets/)
 git ls-files | grep -v "^\.gitattributes$" | grep -v "^secrets/" | xargs git rm -f 2>/dev/null || true
@@ -59,7 +60,7 @@ git add "$BACKUP_DESTINATION"
 MAX_BACKUPS="${N8N_BACKUP_RETENTION:-5}"
 
 # Get list of existing backup files and remove oldest ones
-EXISTING_BACKUPS=$(git ls-files "secrets/backups/*.tar.gz" 2>/dev/null | sort -r || true)
+EXISTING_BACKUPS=$(git ls-files "$BACKUPS_PATH/*.tar.gz" 2>/dev/null | sort -r || true)
 BACKUP_COUNT=$(echo "$EXISTING_BACKUPS" | wc -l)
 
 if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then
