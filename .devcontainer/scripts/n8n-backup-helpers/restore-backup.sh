@@ -63,22 +63,30 @@ mkdir -p "$N8N_DATA_DIR"
 # Restore workflows using n8n CLI
 if [ -d "$TEMP_DIR/n8n-data/workflows" ]; then
     echo "Restoring workflows using n8n CLI..."
-    if command -v npx >/dev/null 2>&1; then
-        # Import all workflow files from backup
-        for workflow_file in "$TEMP_DIR/n8n-data/workflows"/*.json; do
-            [ -f "$workflow_file" ] || continue
-            echo "Importing $(basename "$workflow_file")..."
-            npx n8n import:workflow --input "$workflow_file" || {
-                echo "Warning: Failed to import $(basename "$workflow_file")"
-            }
-        done
-        echo "Workflows imported successfully"
-    else
-        echo "Error: npx not found - cannot run n8n CLI commands"
-        exit 1
-    fi
+    # Import all workflow files from backup
+    for workflow_file in "$TEMP_DIR/n8n-data/workflows"/*.json; do
+        [ -f "$workflow_file" ] || continue
+        echo "Importing $(basename "$workflow_file")..."
+        npx n8n import:workflow --input "$workflow_file" || {
+            echo "Warning: Failed to import $(basename "$workflow_file")"
+        }
+    done
+    echo "Workflows imported successfully"
 else
     echo "No workflow backups found in archive"
+fi
+
+# Restore credentials
+if [ -d "$TEMP_DIR/n8n-data/credentials" ]; then
+    echo "Restoring credentials using n8n CLI..."
+    for credential_file in "$TEMP_DIR/n8n-data/credentials"/*.json; do
+        [ -f "$credential_file" ] || continue
+        echo "Importing $(basename "$credential_file")..."
+        npx n8n import:credentials --input "$credential_file" || {
+            echo "Warning: Failed to import $(basename "$credential_file")"
+        }
+    done
+    echo "Credentials imported successfully"
 fi
 
 # Restore binary data
@@ -93,23 +101,6 @@ if [ -d "$TEMP_DIR/n8n-data/nodes" ]; then
     echo "Restoring custom nodes..."
     cp -r "$TEMP_DIR/n8n-data/nodes" "$N8N_DATA_DIR/"
     echo "Custom nodes restored"
-fi
-
-# Restore credentials
-if [ -d "$TEMP_DIR/n8n-data/credentials" ]; then
-    echo "Restoring credentials using n8n CLI..."
-    if command -v npx >/dev/null 2>&1; then
-        for credential_file in "$TEMP_DIR/n8n-data/credentials"/*.json; do
-            [ -f "$credential_file" ] || continue
-            echo "Importing $(basename "$credential_file")..."
-            npx n8n import:credentials --input "$credential_file" || {
-                echo "Warning: Failed to import $(basename "$credential_file")"
-            }
-        done
-        echo "Credentials imported successfully"
-    else
-        echo "Warning: npx not found - cannot import credentials"
-    fi
 fi
 
 # Set proper permissions
