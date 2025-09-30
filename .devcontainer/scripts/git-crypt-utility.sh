@@ -7,7 +7,7 @@ set -e
 
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_DIR="$(dirname "$0")"
-KEYS_DIR="${TMPDIR:-/tmp}/git-crypt-keys"
+KEYS_DIR="secrets/git-crypt-keys"
 
 show_usage() {
     if [ -f "$SCRIPT_DIR/help/$SCRIPT_NAME.help" ]; then
@@ -31,7 +31,7 @@ check_git_crypt() {
 }
 
 export_key() {
-    local key_file="${1:-git-crypt-key.bin}"
+    local key_file="${1:-${CODESPACE_NAME}-git-crypt-key.bin}"
 
     echo "Exporting git-crypt key..."
 
@@ -45,19 +45,14 @@ export_key() {
     # Mark key as backed up in .env
     sed -i 's/GIT_CRYPT_KEY_BACKED_UP=.*/GIT_CRYPT_KEY_BACKED_UP=true/' .env
 
-    echo "✅ Key exported successfully!"
-    echo "🔕 Key backup reminders disabled"
-    echo "📁 Location: $full_path"
-    echo "📏 Size: $(du -h "$full_path" | cut -f1)"
+    echo "✅ Key exported: $full_path"
+    echo "🔕 Backup reminders disabled"
     echo ""
     echo "⚠️  IMPORTANT:"
     echo "   • This key can decrypt ALL encrypted files in this repository"
     echo "   • Store it securely (password manager, encrypted drive)"
-    echo "   • Do NOT commit this key to any git repository"
-    echo "   • Share only via secure channels"
     echo ""
-    echo "🔗 To use this key on another machine:"
-    echo "   $SCRIPT_NAME import-key $key_file"
+    echo "Import: $SCRIPT_NAME import-key $key_file"
 }
 
 import_key() {

@@ -86,6 +86,9 @@ temp/
 # Note: This should match N8N_BACKUPS_PATH in .env
 secrets/backups/
 
+# Git-crypt keys
+secrets/git-crypt-keys/
+
 # OS
 .DS_Store
 .DS_Store?
