@@ -45,15 +45,6 @@ fi
 # Create or switch to orphan backup branch
 git checkout --orphan "$BACKUP_BRANCH" 2>/dev/null || git checkout "$BACKUP_BRANCH"
 
-# Initialize git-crypt and secrets structure on first use of this branch
-if [ ! -f .gitattributes ]; then
-    echo "Setting up git-crypt and secrets structure on backups branch..."
-    git-crypt init 2>/dev/null || true  # May already be initialized
-    echo "secrets/** filter=git-crypt diff=git-crypt" > .gitattributes
-    git add .gitattributes
-    git commit -m "Initialize git-crypt for encrypted secrets" 2>/dev/null || true
-fi
-
 # Ensure secrets/backups directory exists
 mkdir -p secrets/backups
 
