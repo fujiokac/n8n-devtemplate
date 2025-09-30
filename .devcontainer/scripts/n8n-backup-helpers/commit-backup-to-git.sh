@@ -52,8 +52,6 @@ mkdir -p "$BACKUPS_PATH"
 # Clean working directory if switching to existing orphan branch (except .gitattributes and secrets/)
 git ls-files | grep -v "^\.gitattributes$" | grep -v "^secrets/" | xargs git rm -f 2>/dev/null || true
 
-# Copy backup file to secrets/backups/ folder
-cp "$TEMP_BACKUP" "$BACKUP_DESTINATION"
 git add "$BACKUP_DESTINATION"
 
 # Keep only the last N backups (default: 5)
