@@ -25,6 +25,10 @@ esac
 
 echo "=== n8n Restore ==="
 
+# Stop n8n before restoring
+echo "Stopping n8n before restore..."
+"$SCRIPT_DIR/stop-n8n.sh"
+
 # Check if backup file is provided
 if [ $# -eq 0 ] || [ ! -f "$1" ]; then
     # Restore from git
