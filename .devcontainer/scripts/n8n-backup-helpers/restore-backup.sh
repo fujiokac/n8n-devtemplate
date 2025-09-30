@@ -45,12 +45,9 @@ fi
 # Create temporary directory
 mkdir -p "$TEMP_DIR"
 
-ARCHIVE_FILE="$BACKUP_FILE"
-
 # Extract archive
 echo "Extracting backup..."
-cd "$TEMP_DIR"
-tar -xzf "$ARCHIVE_FILE"
+tar -xzf "$BACKUP_FILE" -C "$TEMP_DIR"
 
 # Verify backup structure
 if [ ! -d "$TEMP_DIR/n8n-data" ]; then
