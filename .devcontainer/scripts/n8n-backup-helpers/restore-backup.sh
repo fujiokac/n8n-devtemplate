@@ -3,21 +3,17 @@
 # Restore backup of n8n workflows and custom nodes
 # NOTE: This script supports legacy encrypted backups (.tar.gz.enc) for compatibility
 # Current backup system uses git-crypt for encryption (plain .tar.gz files)
-# Usage: restore-backup.sh <scripts_dir> <backup_file>
+# Usage: restore-backup.sh <backup_file>
 
 set -e
-
-# First parameter is the scripts directory
-SCRIPT_DIR="$1"
-shift
 
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-restore-$$"
 
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 <scripts_dir> <backup_file>"
-    echo "Example: $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz"
-    echo "         $0 /path/to/scripts n8n-backup-20250901-143022.tar.gz.enc (legacy)"
+    echo "Usage: $0 <backup_file>"
+    echo "Example: $0 n8n-backup-20250901-143022.tar.gz"
+    echo "         $0 n8n-backup-20250901-143022.tar.gz.enc (legacy)"
     exit 1
 fi
 
@@ -62,9 +58,9 @@ mkdir -p "$TEMP_DIR"
 
 # Handle encrypted or unencrypted archives
 if [ "$IS_ENCRYPTED" = "true" ]; then
-    echo "Decrypting backup..."
-    ARCHIVE_FILE="$TEMP_DIR/backup.tar.gz"
-    "$SCRIPT_DIR/n8n-backup/decrypt-backup.sh" "$BACKUP_FILE" "$ARCHIVE_FILE"
+    echo "Error: Legacy encrypted backups (.tar.gz.enc) are not supported by this helper"
+    echo "Please use the orchestrator script which handles decryption"
+    exit 1
 else
     echo "Using unencrypted backup..."
     ARCHIVE_FILE="$BACKUP_FILE"
@@ -82,11 +78,8 @@ if [ ! -d "$TEMP_DIR/n8n-data" ]; then
     exit 1
 fi
 
-# Stop n8n before restoring
-echo "Stopping n8n before restore..."
-"$SCRIPT_DIR/stop-n8n.sh"
-
 # Create n8n data directory if it doesn't exist
+echo "Note: Ensure n8n is stopped before running this restore"
 mkdir -p "$N8N_DATA_DIR"
 
 # Restore workflows using n8n CLI

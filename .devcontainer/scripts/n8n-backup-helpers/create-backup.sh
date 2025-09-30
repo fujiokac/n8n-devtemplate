@@ -1,13 +1,9 @@
 #!/bin/sh
 
 # Create encrypted backup of n8n workflows and custom nodes
-# Usage: create-backup.sh <scripts_dir> [backup_name] [--auto-commit]
+# Usage: create-backup.sh [backup_name]
 
 set -e
-
-# First parameter is the scripts directory
-SCRIPT_DIR="$1"
-shift
 
 GIT_USER="$(git config user.name | tr ' ' '-' | tr '[:upper:]' '[:lower:]')"
 BACKUP_NAME="${1:-${GIT_USER}_n8n-backup-$(date +%Y%m%d-%H%M%S)}"
@@ -66,15 +62,6 @@ rm -rf "$TEMP_DIR"
 echo "Backup created successfully: $BACKUP_FILE"
 echo "Size: $(du -h "$BACKUP_FILE" | cut -f1)"
 echo ""
-
-# Auto-commit if requested
-if [ "$1" = "--auto-commit" ] || [ "$2" = "--auto-commit" ]; then
-    echo "Auto-committing to git..."
-    "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh" "$BACKUP_FILE"
-else
-    echo "To commit backup to git:"
-    echo "$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh '$BACKUP_FILE'"
-fi
 
 # Return backup file path for orchestrator scripts
 echo "BACKUP_FILE:$BACKUP_FILE"

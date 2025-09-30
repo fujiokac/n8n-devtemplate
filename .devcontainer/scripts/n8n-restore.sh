@@ -8,6 +8,7 @@ set -e
 
 # First parameter is the scripts directory
 SCRIPT_DIR="$1"
+BACKUP_HELPERS_DIR="$SCRIPT_DIR/n8n-backup-helpers"
 shift
 
 # Setup logging
@@ -25,15 +26,33 @@ esac
 echo "=== n8n Restore ==="
 
 # Check if backup file is provided
-if [ $# -gt 0 ] && [ -f "$1" ]; then
+if [ $# -eq 0 ] || [ ! -f "$1" ]; then
+    # Restore from git
+    echo "Fetching latest backup from git..."
+    GIT_OUTPUT=$("$BACKUP_HELPERS_DIR/restore-from-git.sh" "$@")
+
+    # Extract backup filename from the output
+    BACKUP_FILE=$(echo "$GIT_OUTPUT" | grep "BACKUP_FILE:" | cut -d: -f2)
+
+    if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
+        echo "Error: Could not determine backup file location from git"
+        exit 1
+    fi
+    echo "Extracted backup file: $BACKUP_FILE"
+else
     # Local file restore
     BACKUP_FILE="$1"
     echo "Restoring from local file: $BACKUP_FILE"
-    "$SCRIPT_DIR/n8n-backup/restore-backup.sh" "$SCRIPT_DIR" "$BACKUP_FILE"
-else
-    # Restore from git
-    echo "Fetching latest backup from git..."
-    "$SCRIPT_DIR/n8n-backup/restore-from-git.sh" "$SCRIPT_DIR" "$@"
+fi
+
+# Perform the actual restore
+echo "Restoring backup data..."
+"$BACKUP_HELPERS_DIR/restore-backup.sh" "$BACKUP_FILE"
+
+# Cleanup temporary files if created during git extraction
+if echo "$BACKUP_FILE" | grep -q "${TMPDIR:-/tmp}"; then
+    echo "Cleaning up temporary backup file..."
+    rm -f "$BACKUP_FILE"
 fi
 
 echo ""

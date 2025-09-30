@@ -1,14 +1,10 @@
 #!/bin/sh
 
-# Manually restore n8n backup from git branch
-# Usage: restore-from-git.sh <scripts_dir> [backup_name]
+# Extract n8n backup from git branch
+# Usage: restore-from-git.sh [backup_name]
 # If no backup_name provided, uses latest backup
 
 set -e
-
-# First parameter is the scripts directory
-SCRIPT_DIR="$1"
-shift
 BACKUP_BRANCH="${N8N_BACKUP_BRANCH:-backups}"
 
 echo "=== n8n Manual Restore from Git ==="
@@ -42,11 +38,5 @@ git show "$BACKUP_BRANCH:$SELECTED_BACKUP" > "$TEMP_BACKUP" || {
     exit 1
 }
 
-# Restore using the local file restore script
-echo "Starting restore process..."
-"$SCRIPT_DIR/n8n-backup/restore-backup.sh" "$SCRIPT_DIR" "$TEMP_BACKUP"
-
-# Cleanup
-rm -f "$TEMP_BACKUP"
-
-echo "✅ Manual restore completed successfully!"
+# Return backup file path for orchestrator
+echo "BACKUP_FILE:$TEMP_BACKUP"

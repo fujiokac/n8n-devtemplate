@@ -8,6 +8,7 @@ set -e
 # Get the real path of the script, following symlinks
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BACKUP_HELPERS_DIR="$SCRIPT_DIR/n8n-backup-helpers"
 
 # Check for help and restore arguments
 case "${1:-}" in
@@ -29,7 +30,7 @@ echo "=== n8n Backup ==="
 
 # Run backup creation and capture output
 echo "Creating backup..."
-BACKUP_OUTPUT=$("$SCRIPT_DIR/n8n-backup/create-backup.sh" "$SCRIPT_DIR" "$@")
+BACKUP_OUTPUT=$("$BACKUP_HELPERS_DIR/create-backup.sh" "$@")
 echo "$BACKUP_OUTPUT"
 
 # Extract backup filename from the output
@@ -41,7 +42,7 @@ if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
 fi
 
 echo "Committing backup to git..."
-"$SCRIPT_DIR/n8n-backup/commit-backup-to-git.sh" "$BACKUP_FILE"
+"$BACKUP_HELPERS_DIR/commit-backup-to-git.sh" "$BACKUP_FILE"
 
 echo ""
 echo "✅ Backup complete!"
