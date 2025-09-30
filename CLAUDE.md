@@ -18,8 +18,9 @@
 ## Script Development Patterns
 - Always make paths configurable via environment variables (use `${TMPDIR:-/tmp}` not `/tmp`)
 - Separate concerns into individual scripts rather than monolithic solutions
-- Include logging setup in all major scripts: `LOG_FILE="${LOGS_DIR:-logs}/script-name-$(date +%Y%m%d-%H%M%S).log"`
+- Include logging setup in all major scripts: `LOG_FILE="${LOGS_DIR:-logs}/script-name.log"`
 - Remember to `chmod +x` new scripts after creation
+- Create root-level symlinks for user-facing scripts
 
 ## Security and Safety
 - Use application native APIs/CLIs instead of direct database access when available
@@ -28,6 +29,7 @@
 ## User Experience
 - Exit quietly when no action is needed (don't spam logs with "nothing to do" messages)
 - Make retention policies and similar values configurable via .env files
+- Comments and output should describe functionality, not document code changes
 
 ## Core Principles
   - No fluff or filler text - Get to the point immediately
