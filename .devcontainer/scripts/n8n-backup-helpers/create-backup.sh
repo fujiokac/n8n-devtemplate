@@ -17,21 +17,13 @@ echo "Creating n8n backup: $BACKUP_NAME"
 # Create temporary directory
 mkdir -p "$TEMP_DIR/n8n-data"
 
-# Export workflows using n8n native CLI
-echo "Exporting workflows using n8n CLI..."
-if command -v npx >/dev/null 2>&1; then
-    # Export workflows to temp directory
-    npx n8n export:workflow --backup --output "$TEMP_DIR/n8n-data/workflows/" || {
-        echo "Error: Failed to export workflows using n8n CLI"
-        rm -rf "$TEMP_DIR"
-        exit 1
-    }
-    echo "Workflows exported successfully"
-else
-    echo "Error: npx not found - cannot run n8n CLI commands"
+echo "Exporting workflows and credentials using n8n CLI..."
+npx n8n export:workflow --backup --output "$TEMP_DIR/n8n-data/workflows/" && \
+npx n8n export:credentials --backup --output "$TEMP_DIR/n8n-data/credentials/" || {
+    echo "Error: Failed to export workflows or credentials"
     rm -rf "$TEMP_DIR"
     exit 1
-fi
+}
 
 echo "Copying binary data..."
 if [ -d "$N8N_DATA_DIR/binaryData" ]; then

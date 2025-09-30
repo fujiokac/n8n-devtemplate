@@ -95,6 +95,23 @@ if [ -d "$TEMP_DIR/n8n-data/nodes" ]; then
     echo "Custom nodes restored"
 fi
 
+# Restore credentials
+if [ -d "$TEMP_DIR/n8n-data/credentials" ]; then
+    echo "Restoring credentials using n8n CLI..."
+    if command -v npx >/dev/null 2>&1; then
+        for credential_file in "$TEMP_DIR/n8n-data/credentials"/*.json; do
+            [ -f "$credential_file" ] || continue
+            echo "Importing $(basename "$credential_file")..."
+            npx n8n import:credentials --input "$credential_file" || {
+                echo "Warning: Failed to import $(basename "$credential_file")"
+            }
+        done
+        echo "Credentials imported successfully"
+    else
+        echo "Warning: npx not found - cannot import credentials"
+    fi
+fi
+
 # Set proper permissions
 chown -R node:node "$N8N_DATA_DIR" 2>/dev/null || true
 
@@ -106,5 +123,4 @@ echo "✅ Backup restored successfully!"
 echo ""
 echo "Next steps:"
 echo "1. Start n8n: n8n start"
-echo "2. Re-enter any credentials (they are not restored for security)"
-echo "3. Test your workflows"
+echo "2. Test your workflows"
