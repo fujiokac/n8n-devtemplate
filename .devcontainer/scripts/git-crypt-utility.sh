@@ -10,8 +10,8 @@ SCRIPT_DIR="$(dirname "$0")"
 KEYS_DIR="${TMPDIR:-/tmp}/git-crypt-keys"
 
 show_usage() {
-    if [ -f "$SCRIPT_DIR/$SCRIPT_NAME.help" ]; then
-        cat "$SCRIPT_DIR/$SCRIPT_NAME.help"
+    if [ -f "$SCRIPT_DIR/help/$SCRIPT_NAME.help" ]; then
+        cat "$SCRIPT_DIR/help/$SCRIPT_NAME.help"
     else
         echo "Usage: $SCRIPT_NAME <command> [options]"
         echo "Commands: export-key, import-key, unlock, status, help"
