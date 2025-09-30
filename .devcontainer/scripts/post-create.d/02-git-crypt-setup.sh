@@ -35,3 +35,6 @@ else
 fi
 
 echo "✅ Git-crypt setup complete"
+echo ""
+echo "🔑 IMPORTANT: Backup your git-crypt keys!"
+echo "   • Run: .devcontainer/scripts/git-crypt-utility.sh export-key"
