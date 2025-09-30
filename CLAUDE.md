@@ -30,6 +30,7 @@
 - Exit quietly when no action is needed (don't spam logs with "nothing to do" messages)
 - Make retention policies and similar values configurable via .env files
 - Comments and output should describe functionality, not document code changes
+- When unsure how to implement something, ask for clarification instead of repeating the same solution
 
 ## Core Principles
   - No fluff or filler text - Get to the point immediately
