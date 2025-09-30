@@ -9,6 +9,11 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_DIR="$(dirname "$0")"
 KEYS_DIR="secrets/git-crypt-keys"
 
+# Logging setup
+LOG_FILE="${LOGS_DIR:-logs}/git-crypt-utility.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+exec > >(tee "$LOG_FILE") 2>&1
+
 show_usage() {
     if [ -f "$SCRIPT_DIR/help/$SCRIPT_NAME.help" ]; then
         cat "$SCRIPT_DIR/help/$SCRIPT_NAME.help"
@@ -31,7 +36,8 @@ check_git_crypt() {
 }
 
 export_key() {
-    local key_file="${1:-${CODESPACE_NAME}-git-crypt-key.bin}"
+    local repo_name="${GITHUB_REPOSITORY##*/}"
+    local key_file="${1:-${repo_name}-git-crypt-key.bin}"
 
     echo "Exporting git-crypt key..."
 
