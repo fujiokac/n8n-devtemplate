@@ -18,7 +18,7 @@ exec > >(tee "$LOG_FILE") 2>&1
 # Check for help argument
 case "${1:-}" in
     -h|--help|help)
-        cat "$SCRIPT_DIR/n8n-restore.help"
+        cat "$SCRIPT_DIR/help/n8n-restore.help"
         exit 0
         ;;
 esac

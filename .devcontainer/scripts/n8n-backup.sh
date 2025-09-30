@@ -13,7 +13,7 @@ BACKUP_HELPERS_DIR="$SCRIPT_DIR/n8n-backup-helpers"
 # Check for help and restore arguments
 case "${1:-}" in
     -h|--help|help)
-        cat "$SCRIPT_DIR/n8n-backup.help"
+        cat "$SCRIPT_DIR/help/n8n-backup.help"
         exit 0
         ;;
     --restore)
