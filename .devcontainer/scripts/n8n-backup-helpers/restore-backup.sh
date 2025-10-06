@@ -79,13 +79,9 @@ fi
 # Restore credentials
 if [ -d "$TEMP_DIR/n8n-data/credentials" ]; then
     echo "Restoring credentials using n8n CLI..."
-    for credential_file in "$TEMP_DIR/n8n-data/credentials"/*.json; do
-        [ -f "$credential_file" ] || continue
-        echo "Importing $(basename "$credential_file")..."
-        npx n8n import:credentials --input "$credential_file" || {
-            echo "Warning: Failed to import $(basename "$credential_file")"
-        }
-    done
+    npx n8n import:credentials --separate --input="$TEMP_DIR/n8n-data/credentials/" || {
+        echo "Warning: Failed to import credentials"
+    }
     echo "Credentials imported successfully"
 fi
 
