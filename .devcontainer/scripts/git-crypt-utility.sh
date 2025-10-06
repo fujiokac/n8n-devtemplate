@@ -7,7 +7,7 @@ set -e
 
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_DIR="$(dirname "$0")"
-KEYS_DIR="secrets/git-crypt-keys"
+KEYS_DIR="$NO_COMMIT_DIR"
 
 # Logging setup
 LOG_FILE="${LOGS_DIR:-logs}/git-crypt-utility.log"

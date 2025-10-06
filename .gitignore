@@ -86,8 +86,8 @@ temp/
 # Note: This should match N8N_BACKUPS_PATH in .env
 secrets/backups/
 
-# Git-crypt keys
-secrets/git-crypt-keys/
+# Local files not to be committed
+secrets/no-commit/
 
 # OS
 .DS_Store
