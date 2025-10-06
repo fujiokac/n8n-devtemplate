@@ -4,28 +4,30 @@ USAGE:
     n8n-restore [OPTIONS] [backup-file]
 
 DESCRIPTION:
-    Restores n8n data from encrypted backups. Can restore from local backup files
-    or automatically fetch the latest backup from the 'backups' git branch.
+    Restores n8n data from backups. Can restore from local backup files
+    or automatically fetch from the 'backups' git branch.
 
 OPTIONS:
-    -h, --help      Show this help message
-    
+    -h, --help          Show this help message
+    -i, --interactive   Show interactive backup selection menu
+
 ARGUMENTS:
-    backup-file     Optional path to encrypted backup file
-                   If not provided, fetches latest from git
+    backup-file         Optional backup filename or path
+                       If filename only, fetches from git backups branch
+                       If not provided, restores latest from git
 
 EXAMPLES:
     n8n-restore                                    # Restore latest from git
-    n8n-restore /tmp/my-backup.tar.gz.enc         # Restore specific file
+    n8n-restore -i                                 # Choose from available backups
+    n8n-restore test-backup.tar.gz                # Restore specific backup from git
+    n8n-restore /tmp/my-backup.tar.gz             # Restore from local file
     n8n-restore --help                            # Show this help
 
 REQUIREMENTS:
     - N8N_ENCRYPTION_KEY: Set as GitHub Codespace secret
-    - N8N_BACKUP_KEY: Set as GitHub Codespace secret for decryption
     - n8n must be stopped (script will stop it automatically)
 
 NOTES:
-    - Workflows are imported and deactivated for safety
-    - Credentials are not restored (re-enter manually)
+    - Workflows and credentials are restored
     - Binary data and custom nodes are restored
     - Log file: logs/n8n-backup-restore.log
