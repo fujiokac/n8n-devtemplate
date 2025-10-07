@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # Restore backup of n8n workflows and custom nodes
-# NOTE: This script supports legacy encrypted backups (.tar.gz.enc) for compatibility
-# Current backup system uses git-crypt for encryption (plain .tar.gz files)
 # Usage: restore-backup.sh <backup_file>
 
 set -e
@@ -16,7 +14,6 @@ trap 'rm -rf "$TEMP_DIR"' EXIT INT TERM
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <backup_file>"
     echo "Example: $0 n8n-backup-20250901-143022.tar.gz"
-    echo "         $0 n8n-backup-20250901-143022.tar.gz.enc (legacy)"
     exit 1
 fi
 
@@ -24,12 +21,8 @@ BACKUP_FILE="$1"
 
 echo "Restoring n8n backup from: $BACKUP_FILE"
 
-# Verify backup file exists and is correct format
+# Verify backup file format
 case "$BACKUP_FILE" in
-    *.tar.gz.enc)
-        echo "❌ ERROR: Encrypted backups should be decrypted by orchestrator before reaching this helper"
-        exit 1
-        ;;
     *.tar.gz)
         echo "Using backup archive..."
         ;;

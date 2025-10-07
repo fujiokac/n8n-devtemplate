@@ -47,25 +47,9 @@ fi
 
 echo "Using backup: $BACKUP_FILE"
 
-# Decrypt if needed
-case "$BACKUP_FILE" in
-    *.tar.gz.enc)
-        echo "Decrypting legacy backup..."
-        DECRYPTED_FILE="${TMPDIR:-/tmp}/$(basename "$BACKUP_FILE" .enc)"
-        "$BACKUP_HELPERS_DIR/decrypt-backup.sh" "$BACKUP_FILE" "$DECRYPTED_FILE"
-        BACKUP_FILE="$DECRYPTED_FILE"
-        ;;
-esac
-
 # Perform the actual restore
 echo "Restoring backup data..."
 "$BACKUP_HELPERS_DIR/restore-backup.sh" "$BACKUP_FILE"
-
-# Cleanup temporary files if created during git extraction
-if echo "$BACKUP_FILE" | grep -q "${TMPDIR:-/tmp}"; then
-    echo "Cleaning up temporary backup file..."
-    rm -f "$BACKUP_FILE"
-fi
 
 echo ""
 echo "✅ Restore complete!"
