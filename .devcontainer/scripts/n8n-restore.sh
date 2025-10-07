@@ -36,7 +36,7 @@ if [ $# -eq 0 ] || [ ! -f "$1" ]; then
     GIT_OUTPUT=$("$BACKUP_HELPERS_DIR/restore-from-git.sh" "$@")
 
     # Extract backup filename from the output
-    BACKUP_FILE=$(echo "$GIT_OUTPUT" | grep "BACKUP_FILE:" | cut -d: -f2)
+    BACKUP_FILE=$(echo "$GIT_OUTPUT" | tail -1 | cut -d: -f2-)
 
     if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
         echo "Error: Could not determine backup file location from git"

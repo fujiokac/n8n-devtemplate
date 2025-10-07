@@ -39,7 +39,7 @@ fi
 echo "Creating backup..."
 BACKUP_OUTPUT=$("$BACKUP_HELPERS_DIR/create-backup.sh" "$@" 2>&1 | tee /dev/stderr)
 
-BACKUP_FILE=$(echo "$BACKUP_OUTPUT" | grep "BACKUP_FILE:" | cut -d: -f2)
+BACKUP_FILE=$(echo "$BACKUP_OUTPUT" | tail -1 | cut -d: -f2-)
 
 if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
     echo "Error: Could not determine backup file location"
