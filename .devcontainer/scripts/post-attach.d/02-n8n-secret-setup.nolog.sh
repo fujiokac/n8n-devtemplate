@@ -13,9 +13,6 @@ missing_secrets=""
 if [ -z "$N8N_ENCRYPTION_KEY" ]; then
     missing_secrets="$missing_secrets N8N_ENCRYPTION_KEY"
 fi
-if [ -z "$N8N_BACKUP_KEY" ]; then
-    missing_secrets="$missing_secrets N8N_BACKUP_KEY"
-fi
 
 if [ -z "$missing_secrets" ]; then
     echo "✅ All required secrets configured"
@@ -31,7 +28,7 @@ generate_secret() {
     if command -v openssl >/dev/null 2>&1; then
         openssl rand -base64 32
     else
-        python3 -c "import secrets, base64; print(base64.b64encode(secrets.token_bytes(24)).decode())"
+        python3 -c "import secrets, base64; print(base64.b64encode(secrets.token_bytes(32)).decode())"
     fi
 }
 

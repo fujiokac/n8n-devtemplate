@@ -1,0 +1,40 @@
+Git-crypt Key Management Utility
+
+CRITICAL: Git-crypt keys are required to access encrypted data.
+If you lose these keys, your encrypted secrets will be permanently inaccessible.
+
+Usage: git-crypt-keys.sh <command> [options]
+
+Commands:
+  export-key [filename]    Export symmetric key to file (default: git-crypt-key.bin)
+  import-key <filename>    Import symmetric key from file
+  unlock                   Unlock repository with existing key
+  status                   Show git-crypt status
+  help                     Show this help message
+
+Examples:
+  git-crypt-keys.sh export-key my-backup-key.bin
+  git-crypt-keys.sh import-key my-backup-key.bin
+  git-crypt-keys.sh status
+
+Key Storage Recommendations:
+  1. Store keys in a secure password manager
+  2. Keep offline backup on encrypted USB drive
+  3. Share with team members via secure channels
+  4. Never commit keys to any git repository
+
+Key Management Workflow:
+  1. After setting up your repository, immediately export a key backup
+  2. Store the key file securely outside the repository
+  3. Share keys with team members via secure channels (not email/slack)
+  4. Keep multiple backups in different secure locations
+
+Key Rotation (If Compromised):
+  WARNING: Git-crypt does not support key rotation. If a key is compromised:
+  1. Create a new repository with fresh git-crypt initialization
+  2. Export unencrypted data from old repository
+  3. Import data into new repository with new encryption key
+  4. Update all team members with new repository and key
+  5. Revoke access to old repository
+
+  Prevention is critical - treat keys as permanently valid once created.
