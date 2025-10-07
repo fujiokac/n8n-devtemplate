@@ -1,0 +1,6 @@
+=== Git-Crypt Setup ===
+ℹ️ Git-crypt already initialized
+✅ Git-crypt setup complete
+
+🔑 IMPORTANT: Backup your git-crypt keys!
+   • Run: .devcontainer/scripts/git-crypt-utility.sh export-key

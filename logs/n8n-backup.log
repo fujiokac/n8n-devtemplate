@@ -1,0 +1,33 @@
+=== n8n Backup ===
+Creating backup...
+Creating n8n backup: test-with-credentials
+Exporting workflows and credentials using n8n CLI...
+Successfully exported 1 workflows.
+Successfully exported 1 credentials.
+Copying binary data...
+Copying custom nodes...
+Creating archive...
+Backup created successfully: secrets/backups/test-with-credentials.tar.gz
+Size: 4.0K
+
+BACKUP_FILE:secrets/backups/test-with-credentials.tar.gz
+Committing backup to git...
+Committing backup to git: test-with-credentials.tar.gz
+Switched to branch 'backups'
+[backups 1a5dd99] Add n8n backup: 2025-10-06
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 secrets/backups/test-with-credentials.tar.gz
+Switched to branch 'encrypted-backup'
+Your branch is up to date with 'origin/encrypted-backup'.
+✅ Backup committed to 'backups' branch
+   File: test-with-credentials.tar.gz
+   Size: 4.0K
+
+To push backup to remote:
+git push origin backups
+
+✅ Backup complete!
+   Backup: test-with-credentials.tar.gz
+
+To push backup to remote:
+   git push origin backups

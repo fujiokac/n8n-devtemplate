@@ -1,0 +1,7 @@
+=== Post-Attach Setup ===
+Scripts will be logged individually to logs/post-attach/[script-name].log
+→ Running 01-install-claude.sh
+→ Running 02-n8n-secret-setup.nolog.sh
+→ Running 03-check-template-issues.sh
+→ Running 04-n8n-backup-status.sh
+→ Running 99-user-notifications.sh

@@ -1,0 +1,4 @@
+=== Post-Create Setup ===
+Scripts will be logged individually to logs/post-create/[script-name].log
+→ Running 01-generate-env.sh
+→ Running 02-git-crypt-setup.sh

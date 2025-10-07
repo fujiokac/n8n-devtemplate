@@ -1,0 +1,26 @@
+✅ .env configuration loaded
+✅ N8N_ENCRYPTION_KEY configured
+✅ n8n environment ready
+Setting port 5678 to public in Codespaces...
+Starting n8n...
+Press Ctrl+C to stop gracefully, or run './stop-n8n' from another terminal.
+Initializing n8n process
+n8n ready on ::, port 5678
+n8n Task Broker ready on 127.0.0.1, port 5679
+[license SDK] Skipping renewal on init: license cert is not initialized
+[33m[Data table] The Data table module is experimental and subject to change.
+Any tables added before the official release may become inaccessible at any point. Use at your own risk.[0m
+Registered runner "JS Task Runner" (z42ltNGw2edToLqQiW8S1) 
+Version: 1.113.3
+
+Editor is now accessible via:
+https://miniature-space-adventure-77v7vqgp6952rxjv-5678.app.github.dev
+(node:32972) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Owner was set up successfully
+User survey updated successfully
+Received SIGTERM. Shutting down...
+[runnner:js] Received SIGTERM signal, shutting down...
+[runnner:js] Task runner stopped
+
+Stopping n8n...

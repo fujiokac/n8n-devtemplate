@@ -1,0 +1,10 @@
+# Session Log
+
+## Major Changes
+- Implemented git-crypt encrypted secrets structure
+- Created git-crypt key management utility with export/import
+- Moved backup storage to encrypted secrets folder
+- Added credentials backup/restore to n8n backup system
+
+## Notes
+- Multiple background n8n processes running - may need cleanup
