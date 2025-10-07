@@ -27,14 +27,14 @@ echo "Restoring n8n backup from: $BACKUP_FILE"
 # Verify backup file exists and is correct format
 case "$BACKUP_FILE" in
     *.tar.gz.enc)
-        echo "Error: Encrypted backups should be decrypted by orchestrator before reaching this helper"
+        echo "❌ ERROR: Encrypted backups should be decrypted by orchestrator before reaching this helper"
         exit 1
         ;;
     *.tar.gz)
         echo "Using backup archive..."
         ;;
     *)
-        echo "Error: Unsupported backup file format. Expected *.tar.gz"
+        echo "❌ ERROR: Unsupported backup file format. Expected *.tar.gz"
         echo "Provided: $BACKUP_FILE"
         exit 1
         ;;
@@ -49,7 +49,7 @@ tar -xzf "$BACKUP_FILE" -C "$TEMP_DIR"
 
 # Verify backup structure
 if [ ! -d "$TEMP_DIR/n8n-data" ]; then
-    echo "Error: Invalid backup structure - n8n-data directory not found"
+    echo "❌ ERROR: Invalid backup structure - n8n-data directory not found"
     exit 1
 fi
 
@@ -65,7 +65,7 @@ if [ -d "$TEMP_DIR/n8n-data/workflows" ]; then
         [ -f "$workflow_file" ] || continue
         echo "Importing $(basename "$workflow_file")..."
         npx n8n import:workflow --input "$workflow_file" || {
-            echo "Warning: Failed to import $(basename "$workflow_file")"
+            echo "⚠️  WARNING: Failed to import $(basename "$workflow_file")"
         }
     done
     echo "Workflows imported successfully"

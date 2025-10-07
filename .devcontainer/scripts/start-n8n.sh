@@ -12,7 +12,7 @@ if [ -f .env ]; then
     set +a
     echo "✅ .env configuration loaded"
 else
-    echo "❌ .env file not found"
+    echo "❌ ERROR: .env file not found"
     exit 1
 fi
 
@@ -29,7 +29,7 @@ fi
 if [ -n "$N8N_ENCRYPTION_KEY" ]; then
     echo "✅ N8N_ENCRYPTION_KEY configured"
 else
-    echo "❌ N8N_ENCRYPTION_KEY missing from Codespaces Secrets"
+    echo "❌ ERROR: N8N_ENCRYPTION_KEY missing from Codespaces Secrets"
     exit 1
 fi
 
@@ -40,7 +40,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "Setting port 5678 to public in Codespaces..."
     # Toggle private/public to refresh the port forwarding
     gh codespace ports visibility 5678:private -c "$CODESPACE_NAME" >/dev/null 2>&1
-    gh codespace ports visibility 5678:public -c "$CODESPACE_NAME" || echo "Warning: Failed to set port visibility"
+    gh codespace ports visibility 5678:public -c "$CODESPACE_NAME" || echo "⚠️  WARNING: Failed to set port visibility"
 fi
 
 echo "Starting n8n..."

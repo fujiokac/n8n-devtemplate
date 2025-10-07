@@ -17,7 +17,7 @@ BACKUP_DESTINATION="$BACKUPS_PATH/$(basename "$TEMP_BACKUP")"
 
 # Check if backup branch is configured
 if [ -z "$N8N_BACKUP_BRANCH" ]; then
-    echo "Error: N8N_BACKUP_BRANCH environment variable not set"
+    echo "❌ ERROR: N8N_BACKUP_BRANCH environment variable not set"
     echo "Check that .env file is properly configured"
     exit 1
 fi
@@ -28,7 +28,7 @@ echo "Committing backup to git: $(basename "$TEMP_BACKUP")"
 
 # Verify backup file exists
 if [ ! -f "$TEMP_BACKUP" ]; then
-    echo "Error: Backup file '$TEMP_BACKUP' not found"
+    echo "❌ ERROR: Backup file '$TEMP_BACKUP' not found"
     exit 1
 fi
 
@@ -42,7 +42,7 @@ if ! git diff-index --quiet HEAD --; then
     if git stash push -m "Auto-stash before backup commit"; then
         STASH_CREATED=true
     else
-        echo "Error: Failed to stash changes"
+        echo "❌ ERROR: Failed to stash changes"
         exit 1
     fi
 fi
@@ -88,7 +88,7 @@ git checkout "$CURRENT_BRANCH"
 if [ "$STASH_CREATED" = true ]; then
     echo "Restoring stashed changes..."
     if ! git stash pop; then
-        echo "Warning: Failed to restore stashed changes"
+        echo "⚠️  WARNING: Failed to restore stashed changes"
         echo "Your changes are still in the stash. Run 'git stash pop' manually."
     fi
 fi

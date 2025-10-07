@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$0")"
 
 # Validate required environment variables
 if [ -z "$NO_COMMIT_DIR" ]; then
-    echo "Error: NO_COMMIT_DIR environment variable not set"
+    echo "❌ ERROR: NO_COMMIT_DIR environment variable not set"
     echo "This indicates the container was not correctly set up."
     echo "Please ensure .env file is loaded with: NO_COMMIT_DIR=secrets/no-commit"
     exit 1
@@ -34,12 +34,12 @@ show_usage() {
 
 check_git_crypt() {
     if ! command -v git-crypt >/dev/null 2>&1; then
-        echo "Error: git-crypt not found. Please install git-crypt first."
+        echo "❌ ERROR: git-crypt not found. Please install git-crypt first."
         exit 1
     fi
 
     if [ ! -d .git ]; then
-        echo "Error: Not in a git repository"
+        echo "❌ ERROR: Not in a git repository"
         exit 1
     fi
 }
@@ -77,7 +77,7 @@ import_key() {
     local key_file="$1"
 
     if [ -z "$key_file" ]; then
-        echo "Error: Key file required"
+        echo "❌ ERROR: Key file required"
         echo "Usage: $SCRIPT_NAME import-key <filename>"
         exit 1
     fi
@@ -86,7 +86,7 @@ import_key() {
     if [ -f "$KEYS_DIR/$key_file" ]; then
         key_file="$KEYS_DIR/$key_file"
     elif [ ! -f "$key_file" ]; then
-        echo "Error: Key file '$key_file' not found"
+        echo "❌ ERROR: Key file '$key_file' not found"
         echo "Checked: $key_file and $KEYS_DIR/$key_file"
         exit 1
     fi
@@ -168,7 +168,7 @@ case "${1:-help}" in
         show_usage
         ;;
     *)
-        echo "Error: Unknown command '$1'"
+        echo "❌ ERROR: Unknown command '$1'"
         echo ""
         show_usage
         exit 1

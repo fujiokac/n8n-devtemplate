@@ -17,14 +17,14 @@ OUTPUT_FILE="$2"
 
 # Check if backup key is available
 if [ -z "$N8N_BACKUP_KEY" ]; then
-    echo "Error: N8N_BACKUP_KEY environment variable not set"
+    echo "❌ ERROR: N8N_BACKUP_KEY environment variable not set"
     echo "This should be configured as a GitHub Codespace secret"
     exit 1
 fi
 
 # Verify encrypted file exists
 if [ ! -f "$ENCRYPTED_FILE" ]; then
-    echo "Error: Encrypted file '$ENCRYPTED_FILE' not found"
+    echo "❌ ERROR: Encrypted file '$ENCRYPTED_FILE' not found"
     exit 1
 fi
 

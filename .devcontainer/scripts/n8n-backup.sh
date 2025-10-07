@@ -30,7 +30,7 @@ echo "=== n8n Backup ==="
 
 # Check if n8n is running
 if ! pgrep -f "n8n start" > /dev/null; then
-    echo "Error: n8n is not running"
+    echo "❌ ERROR: n8n is not running"
     echo "Please start n8n first: ./start-n8n"
     exit 1
 fi
@@ -42,7 +42,7 @@ BACKUP_OUTPUT=$("$BACKUP_HELPERS_DIR/create-backup.sh" "$@" 2>&1 | tee /dev/stde
 BACKUP_FILE=$(echo "$BACKUP_OUTPUT" | tail -1 | cut -d: -f2-)
 
 if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
-    echo "Error: Could not determine backup file location"
+    echo "❌ ERROR: Could not determine backup file location"
     exit 1
 fi
 

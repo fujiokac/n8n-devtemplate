@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/n8n-data"
 echo "Exporting workflows and credentials using n8n CLI..."
 npx n8n export:workflow --backup --output "$TEMP_DIR/n8n-data/workflows/" && \
 npx n8n export:credentials --backup --output "$TEMP_DIR/n8n-data/credentials/" || {
-    echo "Error: Failed to export workflows or credentials"
+    echo "❌ ERROR: Failed to export workflows or credentials"
     exit 1
 }
 
@@ -44,10 +44,10 @@ fi
 # Validate backup data completeness
 echo "Validating backup data..."
 if [ ! -d "$TEMP_DIR/n8n-data/workflows" ]; then
-    echo "Warning: No workflows exported"
+    echo "⚠️  WARNING: No workflows exported"
 fi
 if [ ! -d "$TEMP_DIR/n8n-data/credentials" ]; then
-    echo "Warning: No credentials exported"
+    echo "⚠️  WARNING: No credentials exported"
 fi
 
 # Create backup in configured directory (encrypted by git-crypt)
@@ -62,7 +62,7 @@ tar -czf "$BACKUP_FILE" -C "$TEMP_DIR" n8n-data/
 # Verify archive integrity
 echo "Verifying archive integrity..."
 if ! tar -tzf "$BACKUP_FILE" >/dev/null; then
-    echo "Error: Archive verification failed - backup may be corrupted"
+    echo "❌ ERROR: Archive verification failed - backup may be corrupted"
     exit 1
 fi
 

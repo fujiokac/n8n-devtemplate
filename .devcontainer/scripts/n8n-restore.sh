@@ -37,7 +37,7 @@ if [ $# -eq 0 ] || [ ! -f "$1" ]; then
     BACKUP_FILE=$(echo "$GIT_OUTPUT" | tail -1 | cut -d: -f2-)
 
     if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
-        echo "Error: Could not determine backup file location from git"
+        echo "❌ ERROR: Could not determine backup file location from git"
         exit 1
     fi
 else

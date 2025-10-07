@@ -14,7 +14,7 @@ echo "=== n8n Manual Restore from Git ==="
 get_backups() {
     # $1: optional git log limit (e.g., "-1" for latest only)
     RESULT=$(git log $1 "$BACKUP_BRANCH" --pretty="" --name-only -- "$BACKUPS_DIR/" | grep -E "\.tar\.gz$") || {
-        echo "Error: No backups found in branch '$BACKUP_BRANCH'"
+        echo "❌ ERROR: No backups found in branch '$BACKUP_BRANCH'"
         exit 1
     }
 
@@ -70,7 +70,7 @@ echo "Using backup: $BACKUP_PATH"
 mkdir -p "$(dirname "$BACKUP_PATH")"
 echo "Fetching backup from git..."
 git show "$BACKUP_BRANCH:$BACKUP_PATH" > "$BACKUP_PATH" || {
-    echo "Error: Backup '$BACKUP_PATH' not found in branch '$BACKUP_BRANCH'"
+    echo "❌ ERROR: Backup '$BACKUP_PATH' not found in branch '$BACKUP_BRANCH'"
     exit 1
 }
 
