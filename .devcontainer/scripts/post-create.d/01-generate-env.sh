@@ -22,10 +22,6 @@ if [ ! -f .env ]; then
         echo "ℹ️  CODESPACE_NAME not set - update N8N_HOST and WEBHOOK_URL in .env manually"
     fi
     
-    # Replace workspace folder placeholder with actual workspace name
-    WORKSPACE_NAME="$(basename "$(pwd)")"
-    sed -i "s|n8n-devtemplate|$WORKSPACE_NAME|g" .env
-    
     echo "✅ .env file created with non-secret configuration"
 else
     echo "✅ .env file already exists"
