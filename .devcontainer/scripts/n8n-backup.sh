@@ -29,7 +29,7 @@ exec > >(tee "$LOG_FILE") 2>&1
 echo "=== n8n Backup ==="
 
 # Check if n8n is running
-if ! pgrep -f "n8n" > /dev/null; then
+if ! pgrep -f "n8n start" > /dev/null; then
     echo "Error: n8n is not running"
     echo "Please start n8n first: ./start-n8n"
     exit 1
