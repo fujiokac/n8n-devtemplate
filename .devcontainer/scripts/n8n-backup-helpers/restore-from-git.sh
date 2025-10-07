@@ -12,6 +12,7 @@ BACKUPS_DIR="${N8N_BACKUPS_PATH:-secrets/backups}"
 echo "=== n8n Manual Restore from Git ==="
 
 get_backups() {
+    # $1: optional git log limit (e.g., "-1" for latest only)
     RESULT=$(git log $1 "$BACKUP_BRANCH" --pretty="" --name-only -- "$BACKUPS_DIR/" | grep -E "\.tar\.gz$") || {
         echo "Error: No backups found in branch '$BACKUP_BRANCH'"
         exit 1
@@ -21,6 +22,8 @@ get_backups() {
 }
 
 select_backup() {
+    # Note: Sets global BACKUP_PATH variable as side effect
+    # This pattern avoids stdout capture issues with interactive prompts
     BACKUP_LIST=$(get_backups)
 
     echo ""
@@ -35,6 +38,9 @@ select_backup() {
 
         # Default to 1 (latest) if empty
         SELECTION=${SELECTION:-1}
+
+        # Skip non-numeric input
+        [ "$SELECTION" -eq "$SELECTION" ] 2>/dev/null || continue
 
         BACKUP_PATH=$(echo "$BACKUP_LIST" | sed -n "${SELECTION}p")
         if [ -n "$BACKUP_PATH" ]; then

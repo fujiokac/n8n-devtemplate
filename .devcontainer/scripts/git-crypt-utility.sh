@@ -7,6 +7,15 @@ set -e
 
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_DIR="$(dirname "$0")"
+
+# Validate required environment variables
+if [ -z "$NO_COMMIT_DIR" ]; then
+    echo "Error: NO_COMMIT_DIR environment variable not set"
+    echo "This indicates the container was not correctly set up."
+    echo "Please ensure .env file is loaded with: NO_COMMIT_DIR=secrets/no-commit"
+    exit 1
+fi
+
 KEYS_DIR="$NO_COMMIT_DIR"
 
 # Logging setup
@@ -54,9 +63,12 @@ export_key() {
     echo "✅ Key exported: $full_path"
     echo "🔕 Backup reminders disabled"
     echo ""
-    echo "⚠️  IMPORTANT:"
+    echo "⚠️  IMPORTANT SECURITY NOTES:"
     echo "   • This key can decrypt ALL encrypted files in this repository"
-    echo "   • Store it securely (password manager, encrypted drive)"
+    echo "   • The key is stored in PLAINTEXT on the filesystem"
+    echo "   • Anyone with access to this codespace can read the key"
+    echo "   • Download and store securely IMMEDIATELY (password manager, encrypted drive)"
+    echo "   • Delete from codespace after downloading if not needed"
     echo ""
     echo "Import: $SCRIPT_NAME import-key $key_file"
 }

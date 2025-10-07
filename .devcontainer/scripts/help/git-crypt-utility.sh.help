@@ -28,3 +28,13 @@ Key Management Workflow:
   2. Store the key file securely outside the repository
   3. Share keys with team members via secure channels (not email/slack)
   4. Keep multiple backups in different secure locations
+
+Key Rotation (If Compromised):
+  WARNING: Git-crypt does not support key rotation. If a key is compromised:
+  1. Create a new repository with fresh git-crypt initialization
+  2. Export unencrypted data from old repository
+  3. Import data into new repository with new encryption key
+  4. Update all team members with new repository and key
+  5. Revoke access to old repository
+
+  Prevention is critical - treat keys as permanently valid once created.

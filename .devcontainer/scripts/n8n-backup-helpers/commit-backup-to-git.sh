@@ -39,8 +39,12 @@ CURRENT_BRANCH=$(git branch --show-current)
 STASH_CREATED=false
 if ! git diff-index --quiet HEAD --; then
     echo "Stashing uncommitted changes..."
-    git stash push -m "Auto-stash before backup commit"
-    STASH_CREATED=true
+    if git stash push -m "Auto-stash before backup commit"; then
+        STASH_CREATED=true
+    else
+        echo "Error: Failed to stash changes"
+        exit 1
+    fi
 fi
 
 # Create or switch to orphan backup branch
@@ -83,7 +87,10 @@ git checkout "$CURRENT_BRANCH"
 # Restore stashed changes if any
 if [ "$STASH_CREATED" = true ]; then
     echo "Restoring stashed changes..."
-    git stash pop
+    if ! git stash pop; then
+        echo "Warning: Failed to restore stashed changes"
+        echo "Your changes are still in the stash. Run 'git stash pop' manually."
+    fi
 fi
 
 echo "✅ Backup committed to '$BACKUP_BRANCH' branch"

@@ -10,6 +10,9 @@ BACKUP_NAME="${1:-${GIT_USER}_n8n-backup-$(date +%Y%m%d-%H%M%S)}"
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-backup-$$"
 
+# Ensure cleanup on exit
+trap 'rm -rf "$TEMP_DIR"' EXIT INT TERM
+
 echo "Creating n8n backup: $BACKUP_NAME"
 
 # Note: Encryption is now handled by git-crypt, no backup key needed
@@ -21,7 +24,6 @@ echo "Exporting workflows and credentials using n8n CLI..."
 npx n8n export:workflow --backup --output "$TEMP_DIR/n8n-data/workflows/" && \
 npx n8n export:credentials --backup --output "$TEMP_DIR/n8n-data/credentials/" || {
     echo "Error: Failed to export workflows or credentials"
-    rm -rf "$TEMP_DIR"
     exit 1
 }
 
@@ -39,6 +41,15 @@ else
     echo "Info: nodes directory not found - no custom nodes to backup"
 fi
 
+# Validate backup data completeness
+echo "Validating backup data..."
+if [ ! -d "$TEMP_DIR/n8n-data/workflows" ]; then
+    echo "Warning: No workflows exported"
+fi
+if [ ! -d "$TEMP_DIR/n8n-data/credentials" ]; then
+    echo "Warning: No credentials exported"
+fi
+
 # Create backup in configured directory (encrypted by git-crypt)
 BACKUP_DIR="${N8N_BACKUPS_PATH:-secrets/backups}"
 mkdir -p "$BACKUP_DIR"
@@ -48,8 +59,12 @@ echo "Creating archive..."
 BACKUP_FILE="$BACKUP_DIR/$BACKUP_NAME.tar.gz"
 tar -czf "$BACKUP_FILE" -C "$TEMP_DIR" n8n-data/
 
-# Cleanup temp extraction
-rm -rf "$TEMP_DIR"
+# Verify archive integrity
+echo "Verifying archive integrity..."
+if ! tar -tzf "$BACKUP_FILE" >/dev/null; then
+    echo "Error: Archive verification failed - backup may be corrupted"
+    exit 1
+fi
 
 echo "Backup created successfully: $BACKUP_FILE"
 echo "Size: $(du -h "$BACKUP_FILE" | cut -f1)"

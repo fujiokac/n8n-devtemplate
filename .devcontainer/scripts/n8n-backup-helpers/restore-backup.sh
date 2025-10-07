@@ -10,6 +10,9 @@ set -e
 N8N_DATA_DIR="${N8N_USER_FOLDER:-.n8n}/.n8n"
 TEMP_DIR="${TMPDIR:-/tmp}/n8n-restore-$$"
 
+# Ensure cleanup on exit
+trap 'rm -rf "$TEMP_DIR"' EXIT INT TERM
+
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <backup_file>"
     echo "Example: $0 n8n-backup-20250901-143022.tar.gz"
@@ -52,7 +55,6 @@ tar -xzf "$BACKUP_FILE" -C "$TEMP_DIR"
 # Verify backup structure
 if [ ! -d "$TEMP_DIR/n8n-data" ]; then
     echo "Error: Invalid backup structure - n8n-data directory not found"
-    rm -rf "$TEMP_DIR"
     exit 1
 fi
 
@@ -80,9 +82,8 @@ fi
 if [ -d "$TEMP_DIR/n8n-data/credentials" ]; then
     echo "Restoring credentials using n8n CLI..."
     npx n8n import:credentials --separate --input="$TEMP_DIR/n8n-data/credentials/" || {
-        echo "Warning: Failed to import credentials"
+        echo "⚠️  WARNING: Failed to import credentials"
     }
-    echo "Credentials imported successfully"
 fi
 
 # Restore binary data
@@ -101,9 +102,6 @@ fi
 
 # Set proper permissions
 chown -R node:node "$N8N_DATA_DIR" 2>/dev/null || true
-
-# Cleanup
-rm -rf "$TEMP_DIR"
 
 echo ""
 echo "✅ Backup restored successfully!"
