@@ -37,16 +37,19 @@ cd "$WORKSPACE_DIR"
 if git rev-parse --git-dir >/dev/null 2>&1; then
     BACKUP_BRANCH="${N8N_BACKUP_BRANCH:-backups}"
     
-    # Try to get backups - exit quietly if none found
+    # Check for backups
     if git fetch origin "$BACKUP_BRANCH:$BACKUP_BRANCH" 2>/dev/null && \
        AVAILABLE_BACKUPS=$(git show "$BACKUP_BRANCH:$BACKUPS_PATH" 2>/dev/null | grep -E "\.tar\.gz$" | sort -r) && \
        [ -n "$AVAILABLE_BACKUPS" ]; then
-        
+
         BACKUP_COUNT=$(echo "$AVAILABLE_BACKUPS" | wc -l)
         LATEST_BACKUP=$(echo "$AVAILABLE_BACKUPS" | head -1)
         echo "📦 Found $BACKUP_COUNT n8n backup(s) available"
         echo "   Latest: $LATEST_BACKUP"
         echo ""
         echo "To restore workflows, see README for restoration instructions"
+    else
+        echo "No backups found. To create a backup: ./n8n-backup"
+        echo "For more options: ./n8n-backup help"
     fi
 fi
