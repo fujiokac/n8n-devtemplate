@@ -58,22 +58,26 @@ git ls-files | grep -v "^\.gitattributes$" | grep -v "^secrets/" | xargs git rm 
 
 git add "$BACKUP_DESTINATION"
 
-# Keep only the last N backups (default: 5)
-MAX_BACKUPS="${N8N_BACKUP_RETENTION:-5}"
+# Keep only the last N backups if retention is configured
+if [ -n "$N8N_BACKUP_RETENTION" ]; then
+    MAX_BACKUPS="$N8N_BACKUP_RETENTION"
 
-# Get list of existing backup files and remove oldest ones
-EXISTING_BACKUPS=$(git ls-files "$BACKUPS_PATH/*.tar.gz" 2>/dev/null | sort -r || true)
-BACKUP_COUNT=$(echo "$EXISTING_BACKUPS" | wc -l)
-
-if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then
-    echo "Cleaning up old backups (keeping $MAX_BACKUPS most recent)..."
-    BACKUPS_TO_REMOVE=$(echo "$EXISTING_BACKUPS" | tail -n +$MAX_BACKUPS)
-    for old_backup in $BACKUPS_TO_REMOVE; do
-        if [ -f "$old_backup" ]; then
-            rm -f "$old_backup"
-            echo "Removed old backup: $old_backup"
-        fi
-    done
+    # Get list of existing backup files and remove oldest ones
+    EXISTING_BACKUPS=$(git ls-files "$BACKUPS_PATH/*.tar.gz" 2>/dev/null | sort -r || true)
+    BACKUP_COUNT=$(echo "$EXISTING_BACKUPS" | wc -l)
+    
+    if [ "$BACKUP_COUNT" -ge "$MAX_BACKUPS" ]; then
+        echo "Cleaning up old backups (keeping $MAX_BACKUPS most recent)..."
+        BACKUPS_TO_REMOVE=$(echo "$EXISTING_BACKUPS" | tail -n +$MAX_BACKUPS)
+        for old_backup in $BACKUPS_TO_REMOVE; do
+            if [ -f "$old_backup" ]; then
+                rm -f "$old_backup"
+                echo "Removed old backup: $old_backup"
+            fi
+        done
+    fi
+else
+    echo "⚠️  WARNING: N8N_BACKUP_RETENTION not set - backups will not be automatically cleaned up"
 fi
 
 # Commit the backup
