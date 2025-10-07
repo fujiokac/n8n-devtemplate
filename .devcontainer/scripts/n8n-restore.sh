@@ -29,25 +29,23 @@ echo "=== n8n Restore ==="
 echo "Stopping n8n before restore..."
 "$SCRIPT_DIR/stop-n8n.sh"
 
-# Check if backup file is provided
+# Determine backup source
 if [ $# -eq 0 ] || [ ! -f "$1" ]; then
     # Restore from git
     echo "Fetching latest backup from git..."
     GIT_OUTPUT=$("$BACKUP_HELPERS_DIR/restore-from-git.sh" "$@")
-
-    # Extract backup filename from the output
     BACKUP_FILE=$(echo "$GIT_OUTPUT" | tail -1 | cut -d: -f2-)
 
     if [ -z "$BACKUP_FILE" ] || [ ! -f "$BACKUP_FILE" ]; then
         echo "Error: Could not determine backup file location from git"
         exit 1
     fi
-    echo "Extracted backup file: $BACKUP_FILE"
 else
-    # Local file restore
+    # Local file provided
     BACKUP_FILE="$1"
-    echo "Restoring from local file: $BACKUP_FILE"
 fi
+
+echo "Using backup: $BACKUP_FILE"
 
 # Decrypt if needed
 case "$BACKUP_FILE" in
