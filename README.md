@@ -8,40 +8,23 @@ This template provides a complete n8n automation platform setup
 
 ## Quick Start
 
-### 1. Choose Your Setup
+### 1. Create Repository
 
-**Use as template** - Creates an independent repository with no connection to upstream updates
-**Fork** - Maintains connection to this template, allowing you to pull future improvements
+Use this template when creating a new repository (or click **"Use this template"** button above.) Template updates will automatically generate pull requests.
 
-### 2. Set Up Secrets (Required)
+### 2. Set Up Secrets
 
-Before creating your Codespace, add these secrets in GitHub:
+You'll be guided through secret setup during Codespace creation.
 
-**Repository → Settings → Security → Secrets and variables → Codespaces → New repository secret**
-
-| Secret Name | Purpose | Example Generation |
-|-------------|---------|-------------------|
-| `DB_PASSWORD` | PostgreSQL database password | `openssl rand -base64 32` |
-| `N8N_ENCRYPTION_KEY` | n8n data encryption key | `openssl rand -base64 32` |
-| `N8N_BACKUP_KEY` | Backup encryption key | `openssl rand -base64 32` |
+| Secret Name |  | Purpose |
+|-------------|--|---------|
+| `N8N_ENCRYPTION_KEY` | Required | n8n data encryption key |
+| `DB_PASSWORD` | Optional | PostgreSQL database password (only if using PostgreSQL) |
 
 ### 3. Open in Codespaces
 
 1. From your repository, click "Code" → "Codespaces" → "Create codespace"
 2. Wait for container to build
-
-### 4. Start n8n
-
-```sh
-./start-n8n
-```
-
-Access n8n at the URL shown in the terminal output.
-
-- **Stop n8n**: `Ctrl+C` in terminal
-- **Reset data**: Remove `n8n_data/` directory (⚠️ deletes all workflows)
-
-> **Note**: If you skip setting up secrets, you'll be prompted with generated values on first attach.
 
 ## Template Updates
 
@@ -59,34 +42,21 @@ To manually trigger template updates, go to **Actions** → **"Template Sync"** 
 
 > **Note**: Template updates only affect configuration and setup files, never your n8n workflows or data.
 
-## Data Persistence
-
-- **n8n workflows**: Stored in `n8n_data/` directory (persists across container rebuilds)
-
-### Creating Backups
+## Starting n8n
 
 ```sh
-# Create encrypted backup and commit to git
-./n8n-backup
-
-# Create backup with custom name
-./n8n-backup my-project-backup
+./start-n8n
 ```
 
-### Restoring Backups
+Access n8n at the URL shown in the terminal output.
 
-```sh
-# Restore latest backup from git
-./n8n-backup --restore
+- **Stop n8n**: `Ctrl+C` in terminal or `./stop-n8n`
+- **Reset data**: Remove `n8n_data/` directory (⚠️ deletes all workflows)
 
-# Restore specific backup file
-./n8n-backup --restore /path/to/backup.tar.gz.enc
-./n8n-backup --restore /path/to/backup.tar.gz  # unencrypted
-```
+### n8n Backups and Restoration
 
-**Notes:**
-- Backups are encrypted using `N8N_BACKUP_KEY` secret
-- Unencrypted `.tar.gz` backups are also supported
-- Credentials are not restored for security - re-enter manually
-- Workflows are imported in deactivated state
-- **Important**: Workflows with same ID/name will be replaced during restore
+For backup and restore operations, see: `./n8n-backup help`
+
+## Git-crypt Key Management
+
+Review key management instructions: `./git-crypt-utility help`
