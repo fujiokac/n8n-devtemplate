@@ -40,11 +40,6 @@ case "$BACKUP_FILE" in
         ;;
 esac
 
-if [ ! -f "$BACKUP_FILE" ]; then
-    echo "Error: Backup file '$BACKUP_FILE' not found"
-    exit 1
-fi
-
 # Create temporary directory
 mkdir -p "$TEMP_DIR"
 
