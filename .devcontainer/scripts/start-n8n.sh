@@ -27,7 +27,6 @@ fi
 # fi
 
 if [ -n "$N8N_ENCRYPTION_KEY" ]; then
-    export N8N_ENCRYPTION_KEY="$N8N_ENCRYPTION_KEY"
     echo "✅ N8N_ENCRYPTION_KEY configured"
 else
     echo "❌ N8N_ENCRYPTION_KEY missing from Codespaces Secrets"
