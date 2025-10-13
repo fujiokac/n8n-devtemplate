@@ -8,10 +8,11 @@ RUN apk add --no-cache \
     sudo \
     git-lfs \
     git-crypt \
-    postgresql \
-    postgresql-contrib \
+    # postgresql \
+    # postgresql-contrib \
     ripgrep \
-    github-cli
+    github-cli \
+    sqlite
 
 # Install global n8n and pnpm
 RUN npm install -g pnpm n8n
