@@ -1,10 +1,9 @@
 #!/bin/sh
 
 # Extract n8n backup from git branch
-# Usage: restore-from-git.sh [--list] [-n|--number <num>] [backup_name]
+# Usage: restore-from-git.sh [-i|--interactive] [backup_name]
 # If no backup_name provided, uses latest backup
-# --list: Show numbered list of available backups and exit
-# -n, --number: Select backup by number from list
+# -i, --interactive: Show interactive selection menu
 
 set -e
 BACKUP_BRANCH="${N8N_BACKUP_BRANCH:-backups}"
@@ -22,22 +21,40 @@ get_backups() {
     echo "$RESULT"
 }
 
+select_backup() {
+    # Note: Sets global BACKUP_PATH variable as side effect
+    # This pattern avoids stdout capture issues with interactive prompts
+    BACKUP_LIST=$(get_backups)
+
+    echo ""
+    echo "Available backups:"
+    echo "$BACKUP_LIST" | nl -w2 -s'. '
+    echo ""
+    BACKUP_COUNT=$(echo "$BACKUP_LIST" | wc -l)
+
+    while true; do
+        printf "Select backup (1-%d) or press Enter for latest: " "$BACKUP_COUNT"
+        read -r SELECTION
+
+        # Default to 1 (latest) if empty
+        SELECTION=${SELECTION:-1}
+
+        # Skip non-numeric input
+        [ "$SELECTION" -eq "$SELECTION" ] 2>/dev/null || continue
+
+        BACKUP_PATH=$(echo "$BACKUP_LIST" | sed -n "${SELECTION}p")
+        if [ -n "$BACKUP_PATH" ]; then
+            return
+        fi
+
+        echo "Invalid selection. Please try again."
+    done
+}
+
 # Parse arguments and determine backup
 case "$1" in
-    --list)
-        echo ""
-        echo "Available backups:"
-        get_backups | nl -w2 -s'. '
-        exit 0
-        ;;
-    -n|--number)
-        BACKUP_LIST=$(get_backups)
-        BACKUP_PATH=$(echo "$BACKUP_LIST" | sed -n "${2}p")
-        if [ -z "$BACKUP_PATH" ]; then
-            echo "❌ ERROR: Invalid backup number: $2"
-            echo "Run with --list to see available backups"
-            exit 1
-        fi
+    -i|--interactive)
+        select_backup
         ;;
     "")
         BACKUP_PATH=$(get_backups "-1")
