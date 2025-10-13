@@ -48,7 +48,9 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit"
-        }
+        },
+        "remote.autoForwardPorts": false,
+        "remote.autoForwardPortsSource": "output"
       }
     }
   }
