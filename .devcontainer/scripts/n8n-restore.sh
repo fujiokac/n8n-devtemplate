@@ -15,11 +15,14 @@ shift
 LOG_FILE="${LOGS_DIR:-logs}/n8n-backup-restore.log"
 exec > >(tee "$LOG_FILE") 2>&1
 
-# Check for help argument
+# Check for help and list arguments
 case "${1:-}" in
     -h|--help|help)
         cat "$SCRIPT_DIR/help/n8n-restore.help"
         exit 0
+        ;;
+    --list)
+        exec "$BACKUP_HELPERS_DIR/restore-from-git.sh" "$@"
         ;;
 esac
 
