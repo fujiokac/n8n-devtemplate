@@ -5,7 +5,7 @@
 echo "Setting up n8n development environment..."
 
 # Create data directory
-mkdir -p n8n_data
+mkdir -p /workspaces/n8n_data
 echo "✅ n8n data directory created"
 
 # Create .env from template with non-secret configs
