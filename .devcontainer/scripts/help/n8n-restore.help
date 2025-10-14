@@ -9,7 +9,8 @@ DESCRIPTION:
 
 OPTIONS:
     -h, --help          Show this help message
-    -i, --interactive   Show interactive backup selection menu
+    --list              Show numbered list of available backups
+    -n, --number NUM    Restore backup by number from list
 
 ARGUMENTS:
     backup-file         Optional backup filename or path
@@ -18,7 +19,8 @@ ARGUMENTS:
 
 EXAMPLES:
     n8n-restore                                    # Restore latest from git
-    n8n-restore -i                                 # Choose from available backups
+    n8n-restore --list                             # Show numbered list of backups
+    n8n-restore -n 2                               # Restore backup number 2 from list
     n8n-restore test-backup.tar.gz                # Restore specific backup from git
     n8n-restore /tmp/my-backup.tar.gz             # Restore from local file
     n8n-restore --help                            # Show this help
