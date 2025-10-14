@@ -21,8 +21,8 @@ check_git_crypt_backup_reminder() {
             echo "🔑 REMINDER: Backup your git-crypt encryption keys!"
             echo "   Without these keys, encrypted secrets will be permanently inaccessible."
             echo ""
-            echo "   Quick backup: .devcontainer/scripts/git-crypt-utility.sh export-key"
-            echo "   Full help:    .devcontainer/scripts/git-crypt-utility.sh help"
+            echo "   Quick backup: ./git-crypt-utility export-key"
+            echo "   Full help:    ./git-crypt-utility help"
             echo ""
         fi
     fi
