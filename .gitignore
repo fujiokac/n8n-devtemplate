@@ -88,6 +88,7 @@ secrets/backups/
 
 # Local files not to be committed
 secrets/no-commit/
+!secrets/no-commit/.gitkeep
 
 # OS
 .DS_Store
