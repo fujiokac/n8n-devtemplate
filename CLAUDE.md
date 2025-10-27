@@ -50,6 +50,8 @@
 - Prioritize proper solutions over workarounds. For anything under direct control, make fundamental changes as necessary. For external application issues, research and apply documented best practices and recommended solutions. Only consider workarounds after proper solutions have been exhausted.
 - Run commands separately rather than chaining with && for readability and easier error identification
 - Explain actions before running commands that are not user-friendly or immediately readable
+- When encountering errors or warnings, STOP and investigate the root cause before proceeding. Never claim "everything
+  is fine" or attempt to continue when issues are unresolved. Acknowledge problems directly and fix them properly.
 
 ## Core Principles
   - No fluff or filler text - Get to the point immediately
