@@ -34,6 +34,18 @@ else
     echo "ℹ️ Git-crypt already initialized"
 fi
 
+# Always verify filter configuration exists
+if ! git config --get filter.git-crypt.clean >/dev/null 2>&1; then
+    echo "⚠️ Git-crypt filters missing from .git/config, restoring..."
+    git config filter.git-crypt.smudge '"git-crypt" smudge'
+    git config filter.git-crypt.clean '"git-crypt" clean'
+    git config filter.git-crypt.required true
+    git config diff.git-crypt.textconv '"git-crypt" diff'
+    git config merge.git-crypt.name 'git-crypt merge driver'
+    git config merge.git-crypt.driver '"git-crypt" merge %A %O %B %L'
+    echo "✅ Git-crypt filters restored"
+fi
+
 echo "✅ Git-crypt setup complete"
 echo ""
 echo "🔑 IMPORTANT: Backup your git-crypt keys!"
