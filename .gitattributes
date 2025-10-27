@@ -1,2 +1,2 @@
+**/.gitkeep !filter !diff
 secrets/** filter=git-crypt diff=git-crypt
-secrets/**/.gitkeep !filter !diff
