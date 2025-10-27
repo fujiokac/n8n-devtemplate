@@ -1,3 +1,6 @@
+# Always track .gitkeep files
+!**/.gitkeep
+
 # Environment variables
 .env
 .env.local
@@ -12,8 +15,6 @@ postgres_data/
 # Logs
 *.log
 logs/
-!logs/.gitkeep
-!logs/*/.gitkeep
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -88,7 +89,6 @@ secrets/backups/
 
 # Local files not to be committed
 secrets/no-commit/*
-!secrets/no-commit/.gitkeep
 
 # OS
 .DS_Store
